@@ -8,7 +8,5 @@ run: FORCE
 FORCE: ;
 
 clean:
-	rm -rf $(ODIR)
 	rm run
-
 
