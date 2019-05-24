@@ -8,19 +8,21 @@
  * no es necesario que la utilicen, podrían implementar su lector
  * desde su grafo o algún otro lado
  **/
+
+// Leonidas
 template <typename G>
 class Read {
-	typedef typename G::N N;
-	typedef typename G::E E;
-		
-	public:
-		Read(char* file) {
-            // TODO
-        }
-		
-		graph& getGraph() {
-            // TODO
-        }
+  typedef typename G::N N;
+  typedef typename G::E E;
+
+  public:
+  Read(char* file) {
+    // TODO
+  }
+
+  graph& getGraph() {
+    // TODO
+  }
 };
 
 #endif
