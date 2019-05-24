@@ -28,9 +28,9 @@ git merge master
 Poner los cambios de mi rama en master
 ```bash
 git checkout master
-" Asegurate de haber hecho el paso anterior
+# Asegurate de haber hecho el paso anterior
 git merge Daniel
-" Arregla conflictos si los hay, asegurate que todo corra
+# Arregla conflictos si los hay, asegurate que todo corra
 git push origin master
 ```
 
