@@ -1,14 +1,13 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <iostream>
 #include <vector>
-#include <list>
+#include <set>
 #include <map>
 
 #include "node.h"
 #include "edge.h"
-
-#include <iostream>
 
 using namespace std;
 
@@ -18,28 +17,29 @@ class Graph {
     typedef Graph <N, E> self;
     typedef Node <N> node;
     typedef Edge <N, E> edge;
-    typedef vector <node*> NodeSeq;
-    typedef vector <edge*> EdgeSeq;
-    typedef typename NodeSeq::iterator NodeIte;
-    typedef typename EdgeSeq::iterator EdgeIte;
 
     Graph (bool is_directed): is_directed(is_directed) {
       cout << "El grafo se creo" << endl;
-    } 
+    }
+
     ~Graph () {
       // TO DO
+      cout << "Eliminar lo que se tenga que eliminar" << endl;
     }
 
     // Elvis
     bool addNode (N tag, double x, double y) {
+      node add(tag, x, y);
       // ADD NODE
       // RETURNS FALSE IF IT WAS ALREADY IN THE GRAPH
+      return true;
     }
 
     // Elvis
     bool deleteNode (N tag) {
       // DELETE NODE
       // RETURNS FALSE IF THE VERTEX WAS NOT IN THE GRAPH
+      return true;
     }
 
     // Daniel
@@ -47,63 +47,93 @@ class Graph {
       // ADD EDGE
       // If is_directed == false -> addEdge(to, from, weight)
       // RETURNS FALSE IF THE VERTEX ALREADY EXISTS
+      return true;
     }
 
     // Daniel
     bool deleteEdge (N from, N to) {
-      // Tener cuiado con actualizar las dependencias
+      // Tener cuidado con actualizar las dependencias
+      // Retornar false si el edge no existia
+      return true;
     }
 
     // Elvis
     node* findNode (N tag) {
       // Retorna un puntero de la ubicacion del vertice `node`
-      // retorna end(NodeSeq) si no se encuentra
+      // retorna NULL si no se encuentra
+      node* ret = nullptr;
+      return ret;
     }
 
     // Daniel
     edge* findEdge (N from, N to) {
       // Similar a findVertex
+      node* ret = nullptr;
+      return ret;
     }
 
     // Julio
     double getDensity () {
       // TO DO
+      double density = 0.0;
+      return density;
     }
 
     // Julio
-    bool esFuente (N tag) {
+    bool isSource (N tag) {
+      if (!findNode(tag)) throw "The node does not belong to the graph";
       // retorna si `tag` es un nodo fuente
+      return true;
     }
 
     // Julio
-    bool esHundido (N tag) {
+    bool isSink (N tag) {
+      if (!findNode(tag)) throw "The node does not belong to the graph";
       // retorna si `tag` es un nodo hundido
+      return true;
     }
 
     // Elvis
     int getDegree (N tag) {
-      // TO DO      
+      if (!findNode(tag)) throw "The node does not belong to the graph";
+      // TO DO
+      return 0;  
     }
 
     // Daniel
-    self Prim () {}
+    self Prim () {
+      if (is_directed) throw "The graph must be undirected";
+      self mst(is_directed);
+      return move(mst);
+    }
 
     // Elvis
-    self Kruskal () {}
+    self Kruskal () {
+      if (is_directed) throw "The graph must be undirected";
+      self mst(is_directed);
+      return move(mst);
+    }
 
     // Julio
     // Retorno un vector de pares {etiqueta de un nodo, level de ese nodo}
-    vector <pair <N, int>> BFS (N source) {}
+    vector <pair <N, int>> BFS (N source) {
+      if (!findNode(source)) throw "The node does not belong to the graph";
+      vector <pair <N, int>> ret;
+      return ret;
+    }
 
     // Julio
     // Retorno un vector de pares {etiqueta de un nodo, {tiempo de entrada, tiempo de salida}}
     vector <pair <N, pair <int, int>>> dfs (N source) {
+      if (!findNode(source)) throw "The node does not belong to the graph";
+      vector <pair <N,pair <int, int>>> ret;
+      return ret;
     }
 
     
     // Retorna si el grafo es conexo
     bool isConex () {
-    
+      return true;
     }
 
     // Leonidas
@@ -117,12 +147,8 @@ class Graph {
   private:
 
     const double denseParameter = 0.5;
-
-    NodeSeq nodes;
-    EdgeSeq edgeList;
-    map <node, NodeSeq> adjList;
-    NodeIte ni;
-    EdgeIte ei;
+    set <edge> edgeList;
+    map <node, set <node>> adjList;
     bool is_directed;
 };
 
