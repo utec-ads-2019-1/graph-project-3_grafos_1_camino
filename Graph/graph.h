@@ -45,16 +45,71 @@ class Graph {
     // Daniel
     bool addEdge (N from, N to, E weight) {
       // ADD EDGE
+
+        if(findEdge(from,to))
+            return false;
+        else{
+            if(is_directed){
+                edge NewEdge = Edge(from,to,weight);
+                edgeList.insert(NewEdge);
+                auto it = adjList.find(from);
+                if (it != adjList.end())
+                    it->second.insert(to);
+
+            } else{
+                edge NewEdge1 = Edge(from,to,weight);
+                edge NewEdge2 = Edge(to,from,weight);
+                edgeList.insert(NewEdge1);
+                edgeList.insert(NewEdge2);
+                auto it = adjList.find(from);
+                if (it != adjList.end())
+                    it->second.insert(to);
+                it = adjList.find(to);
+                if (it != adjList.end())
+                    it->second.insert(from);
+
+            }
+            return true;
+        }
+
       // If is_directed == false -> addEdge(to, from, weight)
       // RETURNS FALSE IF THE VERTEX ALREADY EXISTS
-      return true;
     }
 
     // Daniel
     bool deleteEdge (N from, N to) {
-      // Tener cuidado con actualizar las dependencias
+      if(!findEdge())
+          return false;
+      else{
+          if(is_directed){
+              auto it = adjList.find(from);
+              if (it != adjList.end()){
+                  auto it2 = it->second.find(to);
+                  it->second.erase(it2);
+              }
+              auto itE = edgeList.find()
+
+
+
+
+          } else{
+              edge NewEdge1 = Edge(from,to,weight);
+              edge NewEdge2 = Edge(to,from,weight);
+              edgeList.insert(NewEdge1);
+              edgeList.insert(NewEdge2);
+              auto it = adjList.find(from);
+              if (it != adjList.end())
+                  it->second.insert(to);
+              it = adjList.find(to);
+              if (it != adjList.end())
+                  it->second.insert(from);
+
+          }
+          return true;
+      }
+        // Tener cuidado con actualizar las dependencias
       // Retornar false si el edge no existia
-      return true;
+
     }
 
     // Elvis
