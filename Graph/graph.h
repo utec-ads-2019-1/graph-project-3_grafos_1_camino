@@ -29,16 +29,23 @@ class Graph {
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-      node add(tag, x, y);
-      // ADD NODE
-      // RETURNS FALSE IF IT WAS ALREADY IN THE GRAPH
-      return true;
+
+      if(!findNode(tag)) throw "The node was already in the graph";
+      else{
+        newNode= new Node(tag,x,y);
+        adjList.insert(newNode,AdjNodes <Node>);
+        adjList_Trans.insert(newNode,AdjNodes <Node>);
+        return true;
+      }  
     }
 
     // Elvis
     bool deleteNode (N tag) {
-      // DELETE NODE
-      // RETURNS FALSE IF THE VERTEX WAS NOT IN THE GRAPH
+      if(!findNode(tag)) throw "The node doesn't belong to the graph";
+      if(!is_directed){
+        auto it_map=adjList.
+        for(auto = )
+      }
       return true;
     }
 
@@ -59,10 +66,9 @@ class Graph {
 
     // Elvis
     node* findNode (N tag) {
-      // Retorna un puntero de la ubicacion del vertice `node`
-      // retorna NULL si no se encuentra
-      node* ret = nullptr;
-      return ret;
+      auto it_map=adjList.find(tag);
+      if (it_map == adjList.end()) return nullptr;
+      else  return &(it->first);
     }
 
     // Daniel
@@ -95,9 +101,17 @@ class Graph {
 
     // Elvis
     int getDegree (N tag) {
-      if (!findNode(tag)) throw "The node does not belong to the graph";
-      // TO DO
-      return 0;  
+      if (!findNode(tag)) throw "The node doesn't belong to the graph"; 
+      if (!is_directed) {
+        auto node = adjList.find(tag);
+        int degree = node->second.size();
+        return degree;
+      } else{
+        auto node = adjList.find(tag);
+        int outDegree = node->second.size();
+        node = adjList_Trans.find(tag);
+        int inDegree = node->second.size(); 
+        }  
     }
 
     // Daniel
@@ -148,7 +162,8 @@ class Graph {
 
     const double denseParameter = 0.5;
     set <edge> edgeList;
-    map <node, set <node>> adjList;
+    map <node, set <Node>> adjList;
+    map <node, set <Node>> adjList_Trans;
     bool is_directed;
 };
 
