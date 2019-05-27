@@ -30,11 +30,12 @@ class Graph {
     // Elvis
     bool addNode (N tag, double x, double y) {
 
-      if(!findNode(tag)) throw "The node was already in the graph";
+      if(findNode(tag)) throw "The node was already in the graph";
       else{
         newNode= new Node(tag,x,y);
-        adjList.insert(newNode,AdjNodes <Node>);
-        adjList_Trans.insert(newNode,AdjNodes <Node>);
+        adjList.insert(newNode->getTag(), AdjNodes <Node>);
+        adjList_Trans.insert(newNode->getTag(), AdjNodes <Node>);
+        nodelist.insert(*newNode);
         return true;
       }  
     }
