@@ -1,5 +1,10 @@
 # Creen su rama y commiteen en ella :)
 
+Correr el programa
+```bash
+make
+./run
+```
 
 ## Prerequisitos:
 * [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/)
@@ -7,20 +12,28 @@
 Crear rama
 ```bash
 git checkout -b Daniel
+```
+
+Subir cambios a mi rama
+```
 git add --all
 git commit -m 'Avance'
 git push origin Daniel
 ```
 
-Actualizar con master
+Actualizar mi rama con master
 ```bash
+git checkout Daniel
 git pull
 git merge master
 ```
 
-Correr el programa
+Poner los cambios de mi rama en master
 ```bash
-make
-./run
+git checkout master
+# Asegurate de haber hecho el paso anterior
+git merge Daniel
+# Arregla conflictos si los hay, asegurate que todo corra
+git push origin master
 ```
 

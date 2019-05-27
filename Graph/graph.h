@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <queue>
 
 #include "node.h"
 #include "edge.h"
@@ -29,7 +30,6 @@ class Graph {
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-      node add(tag, x, y);
       // ADD NODE
       // RETURNS FALSE IF IT WAS ALREADY IN THE GRAPH
       return true;
@@ -137,7 +137,29 @@ class Graph {
     }
 
     // Leonidas
-    bool isBipartite () {}
+    bool isBipartite () {
+      const bool BLACK = false;
+      const bool WHITE = true;
+      map <N, bool> color;
+      for (node current: nodeList) {
+        N cur_tag = current -> getTag();
+        if (color.count(cur_tag) == 0) {
+          queue <N> Q;
+          Q.push(cur_tag);
+          color[cur_tag] = BLACK;
+          while (not Q.empty()) {
+            N u = Q.front();
+            Q.pop();
+            for (N v: adjList[u]) {
+              if (color.count(v) == 0) {
+                color[v] = (color[u] == BLACK) ? WHITE : BLACK;
+              } else if (color[u] == color[v]) return false;
+            }
+          }
+        }
+      }
+      return true;
+    }
 
     // Leonidas
     bool isStronglyConnected () {
@@ -147,8 +169,9 @@ class Graph {
   private:
 
     const double denseParameter = 0.5;
+    set <node> nodeList;
     set <edge> edgeList;
-    map <node, set <node>> adjList;
+    map <N, set <N>> adjList;
     bool is_directed;
 };
 
