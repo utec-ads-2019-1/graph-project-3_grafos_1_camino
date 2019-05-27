@@ -30,22 +30,22 @@ class Graph {
     // Elvis
     bool addNode (N tag, double x, double y) {
 
-      if(findNode(tag)) throw "The node was already in the graph";
-      else{
-        newNode= new Node(tag,x,y);
-        adjList.insert(newNode->getTag(), AdjNodes <Node>);
-        adjList_Trans.insert(newNode->getTag(), AdjNodes <Node>);
-        nodelist.insert(*newNode);
-        return true;
-      }  
+      if(findNode(tag)) return false;
+      Node* newNode = new Node(tag,x,y);
+      adjList.insert(newNode->getTag(), AdjNodes <Node>);
+      adjList_Trans.insert(newNode->getTag(), AdjNodes <Node>);
+      nodelist.insert(*newNode);
+      return true;  
     }
 
     // Elvis
     bool deleteNode (N tag) {
-      if(!findNode(tag)) throw "The node doesn't belong to the graph";
+      if(!findNode(tag)) return false;
       if(!is_directed){
         auto node = adjList.find(tag)
-        for(auto = node.begin())
+        for (auto = node->second.begin() : node->second){
+
+        }
       }
       return true;
     }
@@ -104,6 +104,21 @@ class Graph {
       return true;
     }
 
+    //Elvis
+    int getDegree (N tag) {
+      if (!findNode(tag)) throw "The node doesn't belong to the graph"; 
+      if (!is_directed) {
+        auto node = adjList.find(tag);
+        int degree = node->second.size();
+        return degree;
+      } else {
+        auto node = adjList.find(tag);
+        int outDegree = node->second.size();
+        node = adjList_Trans.find(tag);
+        int inDegree = node->second.size(); 
+        }  
+    }
+
     // Daniel
     self Prim () {
       if (is_directed) throw "The graph must be undirected";
@@ -153,8 +168,8 @@ class Graph {
     const double denseParameter = 0.5;
     set <node> nodelist;
     set <edge> edgeList;
-    map <node, set <Node>> adjList;
-    map <node, set <Node>> adjList_Trans;
+    map <N, set <Node>> adjList;
+    map <N, set <Node>> adjList_Trans;
     bool is_directed;
 };
 
