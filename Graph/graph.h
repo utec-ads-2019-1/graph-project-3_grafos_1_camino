@@ -43,8 +43,8 @@ class Graph {
     bool deleteNode (N tag) {
       if(!findNode(tag)) throw "The node doesn't belong to the graph";
       if(!is_directed){
-        auto it_map=adjList.
-        for(auto = )
+        auto node = adjList.find(tag)
+        for(auto = node.begin())
       }
       return true;
     }
@@ -65,10 +65,14 @@ class Graph {
     }
 
     // Elvis
-    node* findNode (N tag) {
-      auto it_map=adjList.find(tag);
-      if (it_map == adjList.end()) return nullptr;
-      else  return &(it->first);
+    Node* findNode (N tag) {
+      auto it_set=adjList.find(tag);
+      if (it_set == adjList.end()) return nullptr;
+      else {
+        for (it_set : nodelist){
+          if (it_set->getTag() == tag) return &(*it_set);  
+        }
+      }
     }
 
     // Daniel
@@ -97,21 +101,6 @@ class Graph {
       if (!findNode(tag)) throw "The node does not belong to the graph";
       // retorna si `tag` es un nodo hundido
       return true;
-    }
-
-    // Elvis
-    int getDegree (N tag) {
-      if (!findNode(tag)) throw "The node doesn't belong to the graph"; 
-      if (!is_directed) {
-        auto node = adjList.find(tag);
-        int degree = node->second.size();
-        return degree;
-      } else{
-        auto node = adjList.find(tag);
-        int outDegree = node->second.size();
-        node = adjList_Trans.find(tag);
-        int inDegree = node->second.size(); 
-        }  
     }
 
     // Daniel
@@ -161,6 +150,7 @@ class Graph {
   private:
 
     const double denseParameter = 0.5;
+    set <node> nodelist;
     set <edge> edgeList;
     map <node, set <Node>> adjList;
     map <node, set <Node>> adjList_Trans;

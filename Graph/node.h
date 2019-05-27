@@ -11,6 +11,7 @@ class Node {
     double getY () { return y; }
     bool operator < (const Node& other) const { return tag < other.tag; }
 
+    //Elvis
     int getDegree (N tag) {
       if (!findNode(tag)) throw "The node doesn't belong to the graph"; 
       if (!is_directed) {
@@ -24,7 +25,7 @@ class Node {
         int inDegree = node->second.size(); 
         }  
     }
-    
+
   private:
     N tag;
     double x;
