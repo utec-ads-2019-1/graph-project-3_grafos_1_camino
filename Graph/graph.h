@@ -87,22 +87,37 @@ class Graph {
                   auto it2 = it->second.find(to);
                   it->second.erase(it2);
               }
-              auto itE = edgeList.find()
+              auto itE = edgeList.begin();
+              while (itE != edgeList.end()){
+                  if((*itE).getNodes().first==from and (*itE).getNodes().second==to){
+                      edgeList.erase(itE);
+                      break;
+                  }
+                  itE++;
 
-
-
+              }
 
           } else{
-              edge NewEdge1 = Edge(from,to,weight);
-              edge NewEdge2 = Edge(to,from,weight);
-              edgeList.insert(NewEdge1);
-              edgeList.insert(NewEdge2);
               auto it = adjList.find(from);
-              if (it != adjList.end())
-                  it->second.insert(to);
+              if (it != adjList.end()){
+                  auto it2 = it->second.find(to);
+                  it->second.erase(it2);
+              }
               it = adjList.find(to);
-              if (it != adjList.end())
-                  it->second.insert(from);
+              if (it != adjList.end()){
+                  auto it3 = it->second.find(from);
+                  it->second.erase(it3);
+              }
+              auto itE = edgeList.begin();
+              while (itE != edgeList.end()){
+                  if((*itE).getNodes().first==from and (*itE).getNodes().second==to){
+                      edgeList.erase(itE);
+                  }
+                  if((*itE).getNodes().first==to and (*itE).getNodes().second==from){
+                      edgeList.erase(itE);
+                  }
+                  itE++;
+              }
 
           }
           return true;
@@ -123,8 +138,15 @@ class Graph {
     // Daniel
     edge* findEdge (N from, N to) {
       // Similar a findVertex
-      node* ret = nullptr;
-      return ret;
+      auto it = this->edgeList.begin();
+
+      while (it != edgeList.end()){
+          if((*it).getNodes().first==from and (*it).getNodes().second==to){
+              edge* ret = &(*it);
+              return ret;
+          }
+      }
+      return nullptr;
     }
 
     // Julio
