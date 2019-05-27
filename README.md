@@ -1,39 +1,21 @@
 # Creen su rama y commiteen en ella :)
 
-Correr el programa
+## Prerequisitos:
+* [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/)
+    + Si estás en una distribución basada en Debian (e.g Ubuntu) puedes instalarlo corriendo:
+    
+        ``bash
+        sudo apt-get install libsfml-dev
+        ``
+
+### Correr los tests
 ```bash
-make
+make run
 ./run
 ```
 
-## Prerequisitos:
-* [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/)
-
-Crear rama
+### Correr la interfaz gráfica
 ```bash
-git checkout -b Daniel
+make window
+./window
 ```
-
-Subir cambios a mi rama
-```
-git add --all
-git commit -m 'Avance'
-git push origin Daniel
-```
-
-Actualizar mi rama con master
-```bash
-git checkout Daniel
-git pull
-git merge master
-```
-
-Poner los cambios de mi rama en master
-```bash
-git checkout master
-# Asegurate de haber hecho el paso anterior
-git merge Daniel
-# Arregla conflictos si los hay, asegurate que todo corra
-git push origin master
-```
-
