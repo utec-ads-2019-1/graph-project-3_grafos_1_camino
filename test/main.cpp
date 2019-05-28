@@ -1,7 +1,6 @@
-//#include <graphL/graphlut.h>
 #include <iostream>
 
-#include "graph.h"
+#include "../Graph/graph.h"
 
 using namespace std;
 

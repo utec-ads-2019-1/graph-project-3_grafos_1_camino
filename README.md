@@ -1,12 +1,12 @@
-# Creen su rama y commiteen en ella :)
+# Graph Project
 
 ## Prerequisitos:
 * [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/)
     + Si estás en una distribución basada en Debian (e.g Ubuntu) puedes instalarlo corriendo:
     
-        ``bash
+        ```bash
         sudo apt-get install libsfml-dev
-        ``
+        ```
 
 ### Correr los tests
 ```bash

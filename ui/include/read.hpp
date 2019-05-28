@@ -1,7 +1,7 @@
 #ifndef READ_H
 #define READ_H
 
-#include "graph.h"
+#include "../Graph/graph.h"
 
 /**
  * Clase de ayuda para leer el grafo desde un archivo,

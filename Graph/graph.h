@@ -164,6 +164,7 @@ class Graph {
     // Leonidas
     bool isStronglyConnected () {
       // TO DO
+      return true;
     }
 
   private:
