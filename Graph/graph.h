@@ -31,28 +31,37 @@ class Graph {
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-      if(findNode(tag)) return false;
-      cout<<"se va a crear un nodo"<<endl;
+      if (findNode(tag)) return false;
       node newNode = node(tag,x,y);
       set <N> AdjNodes;
       adjList.insert({newNode.getTag(), AdjNodes});
       adjList_Trans.insert({newNode.getTag(), AdjNodes});
       nodeList.insert(newNode);
-      cout<<"se creo el nodo"<<endl;
       return true;  
     }
 
     // Elvis
-   /* bool deleteNode (N tag) {
-      if(!findNode(tag)) return false;
-      if(!is_directed){
-        auto node = adjList.find(tag)
-        for (auto = node->second.begin() : node->second){
-
-        }
+    bool deleteNode (N tag) {
+      if (!findNode(tag)) return false;
+      auto node = adjList.find(tag);
+      auto it = adjList.find(tag);
+      for (auto i : node -> second){
+        it = adjList.find(i);
+        it->second.erase(tag);
       }
+      adjList.erase(tag);
+      for (auto i = nodeList.begin(); i != nodeList.end(); i++){
+        if (i -> getTag() == tag) nodeList.erase(i);
+      }
+      if (!is_directed)  return true;
+      node = adjList_Trans.find(tag);
+      for (auto i : node -> second){
+        it = adjList.find(i);
+        it->second.erase(tag); 
+      }
+      adjList_Trans.erase(tag);
       return true;
-  }*/
+    }
 
     // Daniel
     bool addEdge (N from, N to, E weight) {
@@ -117,14 +126,14 @@ class Graph {
     int getOutDegree (N tag){
       if (!findNode(tag)) throw "The node doesn't belong to the graph";
       auto node = adjList.find(tag);
-      int outDegree = node->second.size();
+      int outDegree = node -> second.size();
       return outDegree; 
     }   
 
     int getInDegree(N tag){  
       if (!findNode(tag)) throw "The node doesn't belong to the graph";
       auto node = adjList_Trans.find(tag);
-      int inDegree = node->second.size();
+      int inDegree = node -> second.size();
       return inDegree; 
     }
 
@@ -181,7 +190,7 @@ class Graph {
     set <edge> edgeList;
     map <N, set <N>> adjList;
     map <N, set <N>> adjList_Trans;
-    bool is_directed;
+    bool is_directed = false;
 };
 
 #endif
