@@ -18,6 +18,7 @@ class Graph {
     typedef Node <N> node;
     typedef Edge <N, E> edge;
 
+
     Graph (bool is_directed): is_directed(is_directed) {
       cout << "El grafo se creo" << endl;
     }
@@ -31,15 +32,18 @@ class Graph {
     bool addNode (N tag, double x, double y) {
 
       if(findNode(tag)) return false;
-      Node* newNode = new Node(tag,x,y);
-      adjList.insert(newNode->getTag(), AdjNodes <Node>);
-      adjList_Trans.insert(newNode->getTag(), AdjNodes <Node>);
+      cout<<"se va a crear un nodo"<<endl;
+      node* newNode = new node(tag,x,y);
+      set <node> AdjNodes;
+      adjList.insert({newNode->getTag(), AdjNodes});
+      adjList_Trans.insert({newNode->getTag(), AdjNodes});
       nodelist.insert(*newNode);
+      cout<<"se creo el nodo"<<endl;
       return true;  
     }
 
     // Elvis
-    bool deleteNode (N tag) {
+   /* bool deleteNode (N tag) {
       if(!findNode(tag)) return false;
       if(!is_directed){
         auto node = adjList.find(tag)
@@ -48,7 +52,7 @@ class Graph {
         }
       }
       return true;
-    }
+  }*/
 
     // Daniel
     bool addEdge (N from, N to, E weight) {
@@ -66,16 +70,15 @@ class Graph {
     }
 
     // Elvis
-    Node* findNode (N tag) {
+    node* findNode (N tag) {
       auto it_set=adjList.find(tag);
-      if (it_set == adjList.end()) return nullptr;
-      else {
-        for (it_set : nodelist){
-          if (it_set->getTag() == tag) return &(*it_set);  
+      if ( it_set != adjList.end()){
+        for ( auto it_set : nodelist){
+          if (it_set.getTag() == tag) return &(it_set); 
         }
-      }
-    }
-
+      }  
+      return nullptr;  
+   }  
     // Daniel
     edge* findEdge (N from, N to) {
       // Similar a findVertex
@@ -105,19 +108,24 @@ class Graph {
     }
 
     //Elvis
-    int getDegree (N tag) {
-      if (!findNode(tag)) throw "The node doesn't belong to the graph"; 
-      if (!is_directed) {
-        auto node = adjList.find(tag);
-        int degree = node->second.size();
-        return degree;
-      } else {
-        auto node = adjList.find(tag);
-        int outDegree = node->second.size();
-        node = adjList_Trans.find(tag);
-        int inDegree = node->second.size(); 
-        }  
+    int getDegree (N tag) { return getOutDegree(tag); }
+    
+    //Elvis
+    int getOutDegree (N tag){
+      if (!findNode(tag)) throw "The node doesn't belong to the graph";
+      auto node = adjList.find(tag);
+      int outDegree = node->second.size();
+      return outDegree; 
+    }   
+
+    int getInDegree(N tag){  
+      if (!findNode(tag)) throw "The node doesn't belong to the graph";
+      auto node = adjList_Trans.find(tag);
+      int inDegree = node->second.size();
+      return inDegree; 
     }
+
+
 
     // Daniel
     self Prim () {
@@ -168,8 +176,8 @@ class Graph {
     const double denseParameter = 0.5;
     set <node> nodelist;
     set <edge> edgeList;
-    map <N, set <Node>> adjList;
-    map <N, set <Node>> adjList_Trans;
+    map <N, set <node>> adjList;
+    map <N, set <node>> adjList_Trans;
     bool is_directed;
 };
 
