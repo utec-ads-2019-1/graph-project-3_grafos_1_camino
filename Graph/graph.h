@@ -20,12 +20,12 @@ public:
     typedef Edge <N, E> edge;
 
     Graph (bool is_directed): is_directed(is_directed) {
-        cout << "El grafo se creo" << endl;
+    //    cout << "El grafo se creo" << endl;
     }
 
     ~Graph () {
         // TO DO
-        cout << "Eliminar lo que se tenga que eliminar" << endl;
+    //    cout << "Eliminar lo que se tenga que eliminar" << endl;
     }
 
     // Elvis
@@ -55,27 +55,24 @@ public:
             return false;
         if(from == to)
             return false;
-        cout << "se va a crear  arista" << from << " " << to << endl;
+        cout << "se va a crear la arista " << from << " " << to << endl;
         edge newEdge1 =  edge(from,to,weight);
         edgeList.insert(newEdge1);
-        cout << "se ibnsertó la arista"<<endl;
+        cout << "se insertó la arista" << endl;
         auto it = adjList.find(from);
         if (it != adjList.end())
             it->second.insert(to);
         if(!is_directed){
             edge newEdge2 =  edge(to,from,weight);
             edgeList.insert(newEdge2);
-            cout << "se va a crear  arista" << to << " " << from << endl;
+            cout << "se va a crear  arista " << to << " " << from << endl;
             auto it = adjList.find(to);
             if (it != adjList.end())
                 it->second.insert(from);
 
         }
+
         return true;
-
-
-
-
 
     }
         // If is_directed == false -> addEdge(to, from, weight)
@@ -308,10 +305,11 @@ public:
         cout << endl;
         cout << "Imprimiendo aristas" << endl;
         for(auto i:edgeList){
-            cout << i.getNodes().first <<" "<< i.getNodes().second<< " ," ;
+            cout << i.getNodes().first <<" "<< i.getNodes().second<< " "  << i.getWeight() << endl;;
         }
         cout << endl;
 
+        cout << "Imprimiendo la lista de adyacencia" << endl;
         for (auto it = adjList.begin();it != adjList.end();it++){
 
             cout << it->first<< " ";
