@@ -6,7 +6,7 @@
 #include <set>
 #include <map>
 #include <queue>
-
+#include <typeinfo>
 #include "node.h"
 #include "edge.h"
 
@@ -30,9 +30,15 @@ class Graph {
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-      // ADD NODE
-      // RETURNS FALSE IF IT WAS ALREADY IN THE GRAPH
-      return true;
+        if(findNode(tag)) return false;
+        cout<<"se va a crear un nodo"<<endl;
+        node newNode = node(tag,x,y);
+        set <N> AdjNodes;
+        adjList.insert({newNode.getTag(), AdjNodes});
+        adjList_Trans.insert({newNode.getTag(), AdjNodes});
+        nodeList.insert(newNode);
+        cout<<"se creo el nodo"<<endl;
+        return true;
     }
 
     // Elvis
@@ -45,20 +51,24 @@ class Graph {
     // Daniel
     bool addEdge (N from, N to, E weight) {
       // ADD EDGE
+        if(from == to )
+            return false;
 
         if(findEdge(from,to))
             return false;
         else{
             if(is_directed){
-                edge NewEdge = Edge(from,to,weight);
+                edge NewEdge(from,to,weight);
                 edgeList.insert(NewEdge);
+                cout << typeid(NewEdge).name()<< endl;
                 auto it = adjList.find(from);
                 if (it != adjList.end())
                     it->second.insert(to);
 
             } else{
-                edge NewEdge1 = Edge(from,to,weight);
-                edge NewEdge2 = Edge(to,from,weight);
+                edge NewEdge1(from,to,weight);
+                edge NewEdge2(to,from,weight);
+                cout << typeid(NewEdge1).name()<< endl;
                 edgeList.insert(NewEdge1);
                 edgeList.insert(NewEdge2);
                 auto it = adjList.find(from);
@@ -78,24 +88,28 @@ class Graph {
 
     // Daniel
     bool deleteEdge (N from, N to) {
-      if(!findEdge())
+      if(!findEdge(from,to))
           return false;
       else{
           if(is_directed){
               auto it = adjList.find(from);
               if (it != adjList.end()){
-                  auto it2 = it->second.find(to);
-                  it->second.erase(it2);
+                  auto it2 = (it->second).find(to);
+                  (it->second).erase(it2);
               }
-              auto itE = edgeList.begin();
-              while (itE != edgeList.end()){
-                  if((*itE).getNodes().first==from and (*itE).getNodes().second==to){
-                      edgeList.erase(itE);
+
+              auto it2 = edgeList.begin();
+              for (auto itr = edgeList.begin(); itr != edgeList.end(); ++itr)
+              {
+                  cout << typeid(*itr).name()<< endl;
+                  edge ed = *itr;
+                  if(ed.getNodes().first==from and ed.getNodes().second==to){
+                      edgeList.erase(itr);
                       break;
                   }
-                  itE++;
-
               }
+
+
 
           } else{
               auto it = adjList.find(from);
@@ -108,17 +122,21 @@ class Graph {
                   auto it3 = it->second.find(from);
                   it->second.erase(it3);
               }
-              auto itE = edgeList.begin();
-              while (itE != edgeList.end()){
-                  if((*itE).getNodes().first==from and (*itE).getNodes().second==to){
-                      edgeList.erase(itE);
-                  }
-                  if((*itE).getNodes().first==to and (*itE).getNodes().second==from){
-                      edgeList.erase(itE);
-                  }
-                  itE++;
-              }
 
+              auto itr = edgeList.begin();
+
+              while (itr != edgeList.end()){
+                  edge ed = *itr;
+
+                  if(ed.getNodes().first==from and ed.getNodes().second==to){
+                      edgeList.erase(itr);
+                  }
+                  if(ed.getNodes().first==to and ed.getNodes().second==from){
+                      edgeList.erase(itr);
+                  }
+
+                  itr++;
+              }
           }
           return true;
       }
@@ -131,8 +149,16 @@ class Graph {
     node* findNode (N tag) {
       // Retorna un puntero de la ubicacion del vertice `node`
       // retorna NULL si no se encuentra
-      node* ret = nullptr;
-      return ret;
+        auto it_set=adjList.find(tag);
+        if ( it_set != adjList.end()){
+            for ( auto it_set : nodeList){
+                if (it_set.getTag() == tag){
+                    node* ret = &it_set;
+                    return ret;
+                }
+            }
+        }
+        return nullptr;
     }
 
     // Daniel
@@ -140,12 +166,13 @@ class Graph {
       // Similar a findVertex
       auto it = this->edgeList.begin();
 
-      while (it != edgeList.end()){
-          if((*it).getNodes().first==from and (*it).getNodes().second==to){
-              edge* ret = &(*it);
+      for (auto i : edgeList){
+          if(i.getNodes().first==from and i.getNodes().second==to){
+              edge* ret = &i;
               return ret;
           }
       }
+
       return nullptr;
     }
 
@@ -174,7 +201,7 @@ class Graph {
     int getDegree (N tag) {
       if (!findNode(tag)) throw "The node does not belong to the graph";
       // TO DO
-      return 0;  
+      return 0;
     }
 
     // Daniel
@@ -207,7 +234,7 @@ class Graph {
       return ret;
     }
 
-    
+
     // Retorna si el grafo es conexo
     bool isConex () {
       return true;
@@ -243,12 +270,29 @@ class Graph {
       // TO DO
     }
 
+    void ImprimirGrafo(){
+
+        cout << "Imprimiendo nodos" << endl;
+        for(auto i:nodeList){
+            cout << i.getTag() << " ";
+        }
+        cout << endl;
+        cout << "Imprimiendo aristas" << endl;
+        for(auto i:edgeList){
+            cout << i.getNodes().first <<" "<< i.getNodes().second<< " ," ;
+        }
+        cout << endl;
+
+
+    }
+
   private:
 
     const double denseParameter = 0.5;
     set <node> nodeList;
     set <edge> edgeList;
     map <N, set <N>> adjList;
+    map <N, set <N>> adjList_Trans;
     bool is_directed;
 };
 
