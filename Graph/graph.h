@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <iostream>
+#include <typeinfo>
 #include <vector>
 #include <set>
 #include <map>
@@ -25,19 +26,18 @@ class Graph {
 
     ~Graph () {
       // TO DO
-      cout << "Eliminar lo que se tenga que eliminar" << endl;
+      cout << "Elim=inar lo que se tenga que eliminar" << endl;
     }
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-
       if(findNode(tag)) return false;
       cout<<"se va a crear un nodo"<<endl;
-      node* newNode = new node(tag,x,y);
-      set <node> AdjNodes;
-      adjList.insert({newNode->getTag(), AdjNodes});
-      adjList_Trans.insert({newNode->getTag(), AdjNodes});
-      nodelist.insert(*newNode);
+      node newNode = node(tag,x,y);
+      set <N> AdjNodes;
+      adjList.insert({newNode.getTag(), AdjNodes});
+      adjList_Trans.insert({newNode.getTag(), AdjNodes});
+      nodeList.insert(newNode);
       cout<<"se creo el nodo"<<endl;
       return true;  
     }
@@ -71,14 +71,17 @@ class Graph {
 
     // Elvis
     node* findNode (N tag) {
-      auto it_set=adjList.find(tag);
-      if ( it_set != adjList.end()){
-        for ( auto it_set : nodelist){
-          if (it_set.getTag() == tag) return &(it_set); 
+      auto it_set = adjList.find(tag);
+        if ( it_set != adjList.end()){
+          for ( auto it_set : nodeList){
+            if (it_set.getTag() == tag){
+                node* ret = &it_set;
+                return ret;
+            }
+          }
         }
-      }  
       return nullptr;  
-   }  
+     }  
     // Daniel
     edge* findEdge (N from, N to) {
       // Similar a findVertex
@@ -174,10 +177,10 @@ class Graph {
   private:
 
     const double denseParameter = 0.5;
-    set <node> nodelist;
+    set <node> nodeList;
     set <edge> edgeList;
-    map <N, set <node>> adjList;
-    map <N, set <node>> adjList_Trans;
+    map <N, set <N>> adjList;
+    map <N, set <N>> adjList_Trans;
     bool is_directed;
 };
 
