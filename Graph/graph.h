@@ -31,7 +31,7 @@ public:
     // Elvis
     bool addNode (N tag, double x, double y) {
         if(findNode(tag)) return false;
-        cout<<"se va a crear un nodo"<<endl;
+        cout<<"se va a crear el nodo "<<tag<<endl;
         node newNode = node(tag,x,y);
         set <N> AdjNodes;
         adjList.insert({newNode.getTag(), AdjNodes});
@@ -62,6 +62,9 @@ public:
         auto it = adjList.find(from);
         if (it != adjList.end())
             it->second.insert(to);
+        it = adjList_Trans.find(to);
+        if (it != adjList.end())
+            it->second.insert(from);
         if(!is_directed){
             edge newEdge2 =  edge(to,from,weight);
             edgeList.insert(newEdge2);
@@ -69,6 +72,7 @@ public:
             auto it = adjList.find(to);
             if (it != adjList.end())
                 it->second.insert(from);
+            cout << "se inserto la arista"<<endl;
 
         }
 
@@ -90,6 +94,11 @@ public:
                     auto it2 = (it->second).find(to);
                     (it->second).erase(it2);
                 }
+                it = adjList_Trans.find(to);
+                if (it != adjList_Trans.end()){
+                    auto it3 = (it->second).find(from);
+                    (it->second).erase(it3);
+                }
 
                 for (auto itr = edgeList.begin(); itr != edgeList.end(); itr++)
                 {
@@ -100,8 +109,6 @@ public:
                         break;
                     }
                 }
-
-
 
             } else{
                 auto it = adjList.find(from);
@@ -117,7 +124,7 @@ public:
 
                 auto itr = edgeList.begin();
 
-                /*while (itr != edgeList.end()){
+                while (itr != edgeList.end()){
                     edge ed = *itr;
 
                     if(ed.getNodes().first==from and ed.getNodes().second==to){
@@ -128,8 +135,9 @@ public:
                     }
 
                     itr++;
-                }*/
+                }
             }
+            cout << "arista eliminada" << endl;
             return true;
         }
         // Tener cuidado con actualizar las dependencias
@@ -141,7 +149,7 @@ public:
     node* findNode (N tag) {
         // Retorna un puntero de la ubicacion del vertice `node`
         // retorna NULL si no se encuentra
-        auto it_set=adjList.find(tag);
+        auto it_set = adjList.find(tag);
         if ( it_set != adjList.end()){
             for ( auto it_set : nodeList){
                 if (it_set.getTag() == tag){
@@ -188,51 +196,82 @@ public:
     }
 
     // Elvis
-    int getDegree (N tag) {
-        if (!findNode(tag)) throw "The node does not belong to the graph";
-        // TO DO
-        return 0;
+    int getDegree (N tag) { return getOutDegree(tag); }
+
+    //Elvis
+    int getOutDegree (N tag){
+        if (!findNode(tag)) throw "The node doesn't belong to the graph";
+        auto node = adjList.find(tag);
+        int outDegree = node -> second.size();
+        return outDegree;
+    }
+
+    int getInDegree(N tag){
+        if (!findNode(tag)) throw "The node doesn't belong to the graph";
+        auto node = adjList_Trans.find(tag);
+        int inDegree = node -> second.size();
+        return inDegree;
     }
 
     // Daniel
     self Prim (N tag) {
         if (is_directed) throw "The graph must be undirected";
+
+        cout << "Aplicando algoritmo de prim" << endl;
         self mst(is_directed);
 
+
         node* current = findNode(tag);
-
         set <N> currentNodes;
+
+        mst.addNode(current->getTag(),current->getX(),current->getY());
+        currentNodes.insert(tag);
+
+        int i = 1;
         while (current){
-            mst.addNode(current->getTag(),current->getX(),current->getY());
-            currentNodes.insert(current->getTag());
             vector<edge> availableEdges;
-
+            cout << "iteracion "<< i <<  " de current nodes" << endl;
             for (auto A : currentNodes){
-                auto itr = adjList.find(A);
-                for (auto B:itr->second){
-                    auto it2 = currentNodes.find(B);
-                    if(it2==currentNodes.end()){
-                        edge* ed  = findEdge(A,B);
-                        availableEdges.push_back(*ed);
-
+                cout << "current node :" << A << endl;
+                for (auto it = adjList.begin();it != adjList.end();it++){
+                    if(A == it->first){
+                        cout <<"lista de adyacencia de "<< A<<" : " ;
+                        for (auto B: it->second){
+                            cout  <<  B << " ";
+                            auto it2 = currentNodes.find(B);
+                            if(it2!=currentNodes.end()){
+                            } else{
+                                if(findEdge(A,B)){
+                                    edge* ed  = findEdge(A,B);
+                                    edge e = *ed;
+                                    availableEdges.push_back(e);
+                                }
+                            }
+                        }
+                        cout <<endl;
                     }
-                }
-            }
 
+                }
+
+
+            }
             if(availableEdges.empty()){
                 current = nullptr;
             } else{
-                edge e = availableEdges[0];
+                edge* e = &availableEdges[0];
                 for(auto ed: availableEdges){
-                    if(e>ed)
-                        e = ed;
+                    if(e->getWeight()>ed.getWeight())
+                        e = &ed;
                 }
-                mst.addEdge(e.getNodes().first,e.getNodes().second,e.getWeight());
-                current = findNode(e.getNodes().second);
+                current = findNode(e->getNodes().second);
+                mst.addNode(current->getTag(),current->getX(),current->getY());
+                mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
+                currentNodes.insert(current->getTag());
+
             }
+            availableEdges.clear();
+        i++;
         }
-
-
 
         return move(mst);
     }
@@ -311,7 +350,6 @@ public:
 
         cout << "Imprimiendo la lista de adyacencia" << endl;
         for (auto it = adjList.begin();it != adjList.end();it++){
-
             cout << it->first<< " ";
             for (auto i: it->second){
                 cout << i <<" ";
