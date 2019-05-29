@@ -7,9 +7,15 @@ class Grid {
   public:
     Grid ();
     ~Grid ();
+    void draw (sf::RenderWindow*& window);
+
   private:
     void computeGrid ();
-    std::vector <sf::RectangleShape> grid;
+    void computeAxis ();
+    void computeVerticalLines ();
+    void computeHorizontalLines ();
+
+    std::vector <sf::RectangleShape*> grid;
 };
 
 #endif

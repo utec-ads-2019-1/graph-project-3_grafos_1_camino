@@ -2,6 +2,9 @@
 #define UI_HPP
 
 #include <SFML/Graphics.hpp>
+#include "Grid.hpp"
+#include "Menu.hpp"
+#include "GraphUI.hpp"
 
 class UI {
   public:
@@ -10,8 +13,14 @@ class UI {
     void run ();
 
   private:
-    
-    void clear ();
+    sf::RenderWindow* window;
+    sf::Font* font;
+    Menu* menu;
+    GraphUI* graphUI;
+    sf::Event event;
+    int currentView = -1;
+
+    void update ();
     void draw ();
     void handleWindowEvents ();
 
