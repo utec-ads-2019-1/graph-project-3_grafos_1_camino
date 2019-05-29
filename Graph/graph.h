@@ -196,27 +196,33 @@ public:
     bool isSource (N tag) {
         if (!findNode(tag)) throw "The node does not belong to the graph";
         // retorna si `tag` es un nodo fuente
+        //for (auto i : edgeList){
+            //if(i.getNodes().second==tag){
+                //return false;
+                //}
+            //}
+        if (this->getInDegree(tag)==0){
+            return true;
+        }
 
-        for (auto i : edgeList){
-            if(i.getNodes().second==tag){
-                return false;
-                }
-            }
+        return false;
 
-        return true;
     }
 
     // Julio
     bool isSink (N tag) {
         if (!findNode(tag)) throw "The node does not belong to the graph";
         // retorna si `tag` es un nodo hundido
-        for (auto i : edgeList){
-            if(i.getNodes().first==tag){
-                return false;
-            }
+        //for (auto i : edgeList){
+            //if(i.getNodes().first==tag){
+                //return false;
+            //}
+        //
+        if (this->getOutDegree(tag)==0){
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     //Elvis
@@ -304,6 +310,28 @@ public:
     vector <pair <N, int>> BFS (N source) {
         if (!findNode(source)) throw "The node does not belong to the graph";
         vector <pair <N, int>> ret;
+        //completar
+        map <N, int > d;
+        int n = getNumberOfNodes();
+        N s = source;
+        queue<N> cola;
+        set<bool> used;
+
+        cola.push(s);
+        used.insert(s);
+        while (!cola.empty()) {
+            N v = cola.front();
+            cola.pop();
+            for (N u : adjList[v]) {
+                if (!used.count(u)) {
+                    used.insert(u);
+                    cola.push(u);
+                    d[u] = d[v] + 1;
+                }
+            }
+        }
+        
+        for (auto pp: d)ret.emplace_back(pp.first,pp.second);
         return ret;
     }
 
@@ -312,6 +340,7 @@ public:
     vector <pair <N, pair <int, int>>> dfs (N source) {
         if (!findNode(source)) throw "The node does not belong to the graph";
         vector <pair <N,pair <int, int>>> ret;
+        //completar
         return ret;
     }
 
