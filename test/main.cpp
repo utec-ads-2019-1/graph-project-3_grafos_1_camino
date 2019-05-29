@@ -31,10 +31,10 @@ int main (int argc, char *argv[]) {
     cout << graph->getInDegree('a')<<endl;
     cout << graph->getInDegree('b')<<endl;
     cout << graph->getInDegree('f')<<endl;
-    graph -> ImprimirGrafo();
+    // graph -> ImprimirGrafo();
 
     //graph -> deleteEdge ('a','b');
-    graph -> ImprimirGrafo();
+    // graph -> ImprimirGrafo();
     //graph -> ImprimirGrafo();
     //graph -> ImprimirGrafo();
     //graph -> deleteEdge('a', 'b');
@@ -43,7 +43,7 @@ int main (int argc, char *argv[]) {
     if (graph -> findEdge('a','b')) cout << "a b esta en el graphrafo" << endl;
     //if (graph -> findEdge('a','c')) cout << "ab esta en el graphrafo" << endl;
     Graph <char, int> graph2 = graph -> Prim('f');
-    graph2.ImprimirGrafo();
+    // graph2.ImprimirGrafo();
     delete graph;
   } catch (const char* msg) {
     cerr << msg << endl;

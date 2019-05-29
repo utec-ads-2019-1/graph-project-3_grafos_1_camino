@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <iostream>
+#include <typeinfo>
 #include <vector>
 #include <set>
 #include <map>
@@ -19,33 +20,45 @@ public:
     typedef Node <N> node;
     typedef Edge <N, E> edge;
 
+
     Graph (bool is_directed): is_directed(is_directed) {
-    //    cout << "El grafo se creo" << endl;
     }
 
     ~Graph () {
-        // TO DO
-    //    cout << "Eliminar lo que se tenga que eliminar" << endl;
     }
 
     // Elvis
     bool addNode (N tag, double x, double y) {
-        if(findNode(tag)) return false;
-        cout<<"se va a crear el nodo "<<tag<<endl;
-        node newNode = node(tag,x,y);
-        set <N> AdjNodes;
-        adjList.insert({newNode.getTag(), AdjNodes});
-        adjList_Trans.insert({newNode.getTag(), AdjNodes});
-        nodeList.insert(newNode);
-        cout<<"se creo el nodo"<<endl;
-        return true;
+      if (findNode(tag)) return false;
+      node newNode = node(tag,x,y);
+      set <N> AdjNodes;
+      adjList.insert({newNode.getTag(), AdjNodes});
+      adjList_Trans.insert({newNode.getTag(), AdjNodes});
+      nodeList.insert(newNode);
+      return true;  
     }
 
     // Elvis
     bool deleteNode (N tag) {
-        // DELETE NODE
-        // RETURNS FALSE IF THE VERTEX WAS NOT IN THE GRAPH
-        return true;
+      if (!findNode(tag)) return false;
+      auto node = adjList.find(tag);
+      auto it = adjList.find(tag);
+      for (auto i : node -> second){
+        it = adjList.find(i);
+        it->second.erase(tag);
+      }
+      adjList.erase(tag);
+      for (auto i = nodeList.begin(); i != nodeList.end(); i++){
+        if (i -> getTag() == tag) nodeList.erase(i);
+      }
+      if (!is_directed)  return true;
+      node = adjList_Trans.find(tag);
+      for (auto i : node -> second){
+        it = adjList.find(i);
+        it->second.erase(tag); 
+      }
+      adjList_Trans.erase(tag);
+      return true;
     }
 
     // Daniel
@@ -55,10 +68,8 @@ public:
             return false;
         if(from == to)
             return false;
-        cout << "se va a crear la arista " << from << " " << to << endl;
         edge newEdge1 =  edge(from,to,weight);
         edgeList.insert(newEdge1);
-        cout << "se insertó la arista" << endl;
         auto it = adjList.find(from);
         if (it != adjList.end())
             it->second.insert(to);
@@ -68,20 +79,15 @@ public:
         if(!is_directed){
             edge newEdge2 =  edge(to,from,weight);
             edgeList.insert(newEdge2);
-            cout << "se va a crear  arista " << to << " " << from << endl;
             auto it = adjList.find(to);
             if (it != adjList.end())
                 it->second.insert(from);
-            cout << "se inserto la arista"<<endl;
 
         }
 
         return true;
 
     }
-        // If is_directed == false -> addEdge(to, from, weight)
-        // RETURNS FALSE IF THE VERTEX ALREADY EXISTS
-
 
     // Daniel
     bool deleteEdge (N from, N to) {
@@ -102,7 +108,6 @@ public:
 
                 for (auto itr = edgeList.begin(); itr != edgeList.end(); itr++)
                 {
-                    cout << typeid(*itr).name()<< endl;
                     edge ed = *itr;
                     if(ed.getNodes().first==from and ed.getNodes().second==to){
                         edgeList.erase(itr);
@@ -137,33 +142,27 @@ public:
                     itr++;
                 }
             }
-            cout << "arista eliminada" << endl;
             return true;
         }
-        // Tener cuidado con actualizar las dependencias
-        // Retornar false si el edge no existia
 
     }
 
     // Elvis
     node* findNode (N tag) {
-        // Retorna un puntero de la ubicacion del vertice `node`
-        // retorna NULL si no se encuentra
-        auto it_set = adjList.find(tag);
+      auto it_set = adjList.find(tag);
         if ( it_set != adjList.end()){
-            for ( auto it_set : nodeList){
-                if (it_set.getTag() == tag){
-                    node* ret = &it_set;
-                    return ret;
-                }
+          for ( auto it_set : nodeList){
+            if (it_set.getTag() == tag){
+                node* ret = &it_set;
+                return ret;
             }
+          }
         }
-        return nullptr;
-    }
-
+      return nullptr;  
+     }  
+    
     // Daniel
     edge* findEdge (N from, N to) {
-        // Similar a findVertex
         for (auto i : edgeList){
             if(i.getNodes().first==from and i.getNodes().second==to){
                 edge* ret = &i;
@@ -195,9 +194,6 @@ public:
         return true;
     }
 
-    // Elvis
-    int getDegree (N tag) { return getOutDegree(tag); }
-
     //Elvis
     int getOutDegree (N tag){
         if (!findNode(tag)) throw "The node doesn't belong to the graph";
@@ -217,7 +213,6 @@ public:
     self Prim (N tag) {
         if (is_directed) throw "The graph must be undirected";
 
-        cout << "Aplicando algoritmo de prim" << endl;
         self mst(is_directed);
 
 
@@ -230,12 +225,9 @@ public:
         int i = 1;
         while (current){
             vector<edge> availableEdges;
-            cout << "iteracion "<< i <<  " de current nodes" << endl;
             for (auto A : currentNodes){
-                cout << "current node :" << A << endl;
                 for (auto it = adjList.begin();it != adjList.end();it++){
                     if(A == it->first){
-                        cout <<"lista de adyacencia de "<< A<<" : " ;
                         for (auto B: it->second){
                             cout  <<  B << " ";
                             auto it2 = currentNodes.find(B);
@@ -248,7 +240,6 @@ public:
                                 }
                             }
                         }
-                        cout <<endl;
                     }
 
                 }
