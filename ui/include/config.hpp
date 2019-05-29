@@ -61,7 +61,7 @@ const sf::Color FILE_HOVER_COLOR = sf::Color::Blue;
 // CONSOLE
 const float CONSOLE_POS_X = GRID_POS_X;
 const float CONSOLE_POS_Y = GRID_POS_Y + GRID_HEIGHT + PROGRAM_PADDING;
-const float CONSOLE_WIDTH = GRID_WIDTH / 10;
+const float CONSOLE_WIDTH = GRID_WIDTH / 5;
 const float CONSOLE_HEIGHT = HEIGHT - CONSOLE_POS_Y - 2 * PROGRAM_PADDING;
 const float CONSOLE_PADDING = CONSOLE_WIDTH / 10;
 const sf::Color CONSOLE_COLOR = sf::Color::Green;

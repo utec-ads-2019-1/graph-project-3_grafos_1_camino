@@ -28,6 +28,14 @@ void Console::add (std::string text, sf::Font*& font, bool label = false) {
   currentPosX += (label ? 2 : 1) * CONSOLE_WIDTH;
 }
 
+int Console::getSize () { return consoleBox.size(); }
+
+void Console::pop () {
+  consoleBox.pop_back();
+  consoleText.pop_back();
+  currentPosX -= CONSOLE_WIDTH;
+}
+
 void Console::clear () {
   while (int(consoleBox.size()) > 1) consoleBox.pop_back();
   while (int(consoleText.size()) > 1) consoleText.pop_back();

@@ -52,23 +52,7 @@ class View {
       nodes.clear();
       edges.clear();
     };
-    void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
-      if (indexVertexSelected != -1) {
-        verticesUI[indexVertexSelected] -> setFillColor(VERTEX_COLOR);
-        if (toExecute) this -> execute(font);
-        indexVertexSelected = -1;
-      }
-      for (int i = 0; i < int(nodes.size()); i++) {
-        if (verticesUI[i] -> getGlobalBounds().contains(
-              window -> mapPixelToCoords(sf::Mouse::getPosition(*window)))) {
-          verticesUI[i] -> setFillColor(VERTEX_HOVER_COLOR);
-          indexVertexSelected = i;
-        }
-      }
-      if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        toExecute = true;
-      }
-    }
+    virtual void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) = 0;
     virtual void execute (sf::Font*& font) = 0;
     virtual void draw (sf::RenderWindow*& window) = 0;
   protected:

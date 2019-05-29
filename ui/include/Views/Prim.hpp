@@ -14,6 +14,8 @@ class Prim: public View <N, E> {
     void execute (sf::Font*& font) {
 
     }
+    void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
+    }
     void draw (sf::RenderWindow*& window) {
       this -> drawGraph(window);
       this -> console -> draw(window);

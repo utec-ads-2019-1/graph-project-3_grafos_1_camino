@@ -9,7 +9,9 @@ class Console {
     ~Console ();
     void draw (sf::RenderWindow*& window);
     void add (std::string text, sf::Font*& font, bool label);
+    void pop ();
     void clear ();
+    int getSize ();
   private:
     std::vector <sf::RectangleShape*> consoleBox;
     std::vector <sf::Text*> consoleText;
