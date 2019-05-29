@@ -7,7 +7,7 @@ using namespace std;
 
 int main (int argc, char *argv[]) {
   try {
-    Graph <char, int>* graph = new Graph <char, int> (false);
+    Graph <char, int>* graph = new Graph <char, int> (true);
     if (!graph -> addNode('a', 0.0, 0.0)) cerr << "Error inserting node 'a'" << endl;
     if (!graph -> addNode('b', 1.1, 1.1)) cerr << "Error inserting node 'a'" << endl;
     if (!graph -> addNode('c', 1.1, 1.1)) cerr << "Error inserting node 'a'" << endl;
@@ -32,8 +32,8 @@ int main (int argc, char *argv[]) {
     cout << graph->getInDegree('b')<<endl;
     cout << graph->getInDegree('f')<<endl;
     graph -> ImprimirGrafo();
-
-    //graph -> deleteEdge ('a','b');
+    graph -> deleteEdge ('a','b');
+    graph -> deleteEdge ('c','b');
     graph -> ImprimirGrafo();
     //graph -> ImprimirGrafo();
     //graph -> ImprimirGrafo();
@@ -42,8 +42,8 @@ int main (int argc, char *argv[]) {
     if (graph -> findNode('f')) cout << "b esta en el graphrafo" << endl;
     if (graph -> findEdge('a','b')) cout << "a b esta en el graphrafo" << endl;
     //if (graph -> findEdge('a','c')) cout << "ab esta en el graphrafo" << endl;
-    Graph <char, int> graph2 = graph -> Prim('f');
-    graph2.ImprimirGrafo();
+    //Graph <char, int> graph2 = graph -> Prim('f');
+    //graph2.ImprimirGrafo();
     delete graph;
   } catch (const char* msg) {
     cerr << msg << endl;

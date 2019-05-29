@@ -62,9 +62,11 @@ public:
         auto it = adjList.find(from);
         if (it != adjList.end())
             it->second.insert(to);
-        it = adjList_Trans.find(to);
-        if (it != adjList.end())
-            it->second.insert(from);
+        if(is_directed){
+            it = adjList_Trans.find(to);
+            if (it != adjList.end())
+                it->second.insert(from);
+        }
         if(!is_directed){
             edge newEdge2 =  edge(to,from,weight);
             edgeList.insert(newEdge2);
@@ -85,8 +87,9 @@ public:
 
     // Daniel
     bool deleteEdge (N from, N to) {
-        if(!findEdge(from,to))
-            return false;
+        if(!findEdge(from,to)){
+            cout << "la arista "<<from <<to <<" no está en el grafo" << endl;
+            return false;}
         else{
             if(is_directed){
                 auto it = adjList.find(from);
@@ -100,15 +103,10 @@ public:
                     (it->second).erase(it3);
                 }
 
-                for (auto itr = edgeList.begin(); itr != edgeList.end(); itr++)
-                {
-                    cout << typeid(*itr).name()<< endl;
-                    edge ed = *itr;
-                    if(ed.getNodes().first==from and ed.getNodes().second==to){
-                        edgeList.erase(itr);
-                        break;
-                    }
-                }
+                edge* del = findEdge(from,to);
+
+                auto itr = edgeList.find(*del);
+                edgeList.erase(itr);
 
             } else{
                 auto it = adjList.find(from);
@@ -122,20 +120,12 @@ public:
                     (it->second).erase(it3);
                 }
 
-                auto itr = edgeList.begin();
 
-                while (itr != edgeList.end()){
-                    edge ed = *itr;
+                edgeList.erase(edgeList.find(*findEdge(from,to)));
+                edgeList.erase(edgeList.find(*findEdge(to,from)));
 
-                    if(ed.getNodes().first==from and ed.getNodes().second==to){
-                        edgeList.erase(itr);
-                    }
-                    if(ed.getNodes().first==to and ed.getNodes().second==from){
-                        edgeList.erase(itr);
-                    }
 
-                    itr++;
-                }
+
             }
             cout << "arista eliminada" << endl;
             return true;
@@ -355,6 +345,17 @@ public:
                 cout << i <<" ";
             }
             cout << endl;
+        }
+
+        if(is_directed){
+            cout << "Imprimiendo la lista de adyacencia transpuesta" << endl;
+            for (auto it = adjList_Trans.begin();it != adjList_Trans.end();it++){
+                cout << it->first<< " ";
+                for (auto i: it->second){
+                    cout << i <<" ";
+                }
+                cout << endl;
+            }
         }
 
 
