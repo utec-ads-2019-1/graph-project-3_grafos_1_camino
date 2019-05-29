@@ -11,10 +11,21 @@ class Bipartite: public View <N, E> {
     ~Bipartite () {
       delete this -> console;
     }
-    void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
-      
-    };
+    void execute (sf::Font*& font) {
+      this -> console -> clear();
+      pair <bool, map <N, bool>> res = this -> graph -> getBipartiteAndColors();
+      if (not res.first) {
+        this -> console -> add("!Bipartite", font, false);
+      } else {
+        this -> console -> add("Bipartite", font, false);
+      }
+      for (int i = 0; i < int(this -> verticesUI.size()); i++) {
+        this -> verticesUI[i] -> setFillColor(GRAPH_COLORS[res.second[this -> nodes[i].getTag()]]);
+      }
+      this -> toExecute = false;
+    }
     void draw (sf::RenderWindow*& window) {
+      this -> drawGraph(window);
       this -> console -> draw(window);
     };
 };

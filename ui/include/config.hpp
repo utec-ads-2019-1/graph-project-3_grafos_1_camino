@@ -66,6 +66,18 @@ const float CONSOLE_HEIGHT = HEIGHT - CONSOLE_POS_Y - 2 * PROGRAM_PADDING;
 const float CONSOLE_PADDING = CONSOLE_WIDTH / 10;
 const sf::Color CONSOLE_COLOR = sf::Color::Green;
 
+// GRAPH UI
+const float VERTEX_RADIUS = 15.f;
+const sf::Color VERTEX_COLOR = sf::Color::White;
+const sf::Color VERTEX_HOVER_COLOR = sf::Color::Green;
+const sf::Color VERTEX_TEXT_COLOR = sf::Color::Red;
+static std::vector <sf::Color> GRAPH_COLORS = {
+  sf::Color::Blue,
+  sf::Color::Yellow,
+  sf::Color::Magenta,
+  sf::Color::Cyan
+};
+
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {
   sf::RectangleShape* box = new sf::RectangleShape();
@@ -79,6 +91,22 @@ static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f
     box -> setFillColor(background);
   }
   return box;
+}
+
+static sf::Vector2f getWindowCoordinates (float x, float y) {
+  float windowX = ORIGIN_X + (x * GRID_INTERVAL) / 10.f;
+  float windowY = ORIGIN_Y + (y * GRID_INTERVAL) / 10.f;
+  return sf::Vector2f(windowX, windowY);
+}
+
+static sf::CircleShape* buildCircle (float radius, sf::Vector2f position, sf::Color background) {
+  sf::CircleShape* circle = new sf::CircleShape();
+  position.x -= VERTEX_RADIUS;
+  position.y -= VERTEX_RADIUS;
+  circle -> setPosition(position);
+  circle -> setRadius(radius);
+  circle -> setFillColor(background);
+  return circle;
 }
 
 static sf::Text* buildText (sf::Vector2f dimentions, sf::Vector2f position, std::string text, sf::Font*& font) {

@@ -297,12 +297,12 @@ public:
     }
 
     // Leonidas
-    bool isBipartite () {
+    pair <bool, map <N, bool>> getBipartiteAndColors () {
         const bool BLACK = false;
         const bool WHITE = true;
         map <N, bool> color;
         for (node current: nodeList) {
-            N cur_tag = current -> getTag();
+            N cur_tag = current.getTag();
             if (color.count(cur_tag) == 0) {
                 queue <N> Q;
                 Q.push(cur_tag);
@@ -313,12 +313,12 @@ public:
                     for (N v: adjList[u]) {
                         if (color.count(v) == 0) {
                             color[v] = (color[u] == BLACK) ? WHITE : BLACK;
-                        } else if (color[u] == color[v]) return false;
+                        } else if (color[u] == color[v]) return {false, map <N, bool> ()};
                     }
                 }
             }
         }
-        return true;
+        return {true, color};
     }
 
     // Leonidas
@@ -326,6 +326,9 @@ public:
         // TO DO
         return true;
     }
+
+    set <node> getNodeList () const { return nodeList; }
+    set <edge> getEdgeList () const { return edgeList; } 
 
     void ImprimirGrafo(){
 
