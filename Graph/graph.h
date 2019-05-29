@@ -324,6 +324,7 @@ public:
     // Leonidas
     bool isStronglyConnected () {
         // TO DO
+        return true;
     }
 
     void ImprimirGrafo(){

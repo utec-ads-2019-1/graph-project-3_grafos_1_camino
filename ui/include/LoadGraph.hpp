@@ -7,7 +7,7 @@ class LoadGraph {
   public:
     LoadGraph (sf::Font*& font);
     ~LoadGraph ();
-    int update (sf::RenderWindow*& window);
+    int update (sf::RenderWindow*& window, const sf::Event& event);
     void draw (sf::RenderWindow*& window);
   private:
     int indexFileSelected = -1;

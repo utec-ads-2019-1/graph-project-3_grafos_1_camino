@@ -21,6 +21,7 @@ const std::vector <std::string> MENU_OPTIONS = {
   "BFS",
   "Prim",
   "Kruskal",
+  "Bipartite",
   "SCC",
   "Properties"
 };
@@ -60,8 +61,10 @@ const sf::Color FILE_HOVER_COLOR = sf::Color::Blue;
 // CONSOLE
 const float CONSOLE_POS_X = GRID_POS_X;
 const float CONSOLE_POS_Y = GRID_POS_Y + GRID_HEIGHT + PROGRAM_PADDING;
-const float CONSOLE_WIDTH = GRID_WIDTH;
+const float CONSOLE_WIDTH = GRID_WIDTH / 10;
 const float CONSOLE_HEIGHT = HEIGHT - CONSOLE_POS_Y - 2 * PROGRAM_PADDING;
+const float CONSOLE_PADDING = CONSOLE_WIDTH / 10;
+const sf::Color CONSOLE_COLOR = sf::Color::Green;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {
@@ -91,22 +94,22 @@ static sf::Text* buildText (sf::Vector2f dimentions, sf::Vector2f position, std:
 
 template <typename N, typename E>
 static void loadFromFile (std::string fileName, Graph <N, E>*& graph, bool is_directed) {
+  graph = new Graph <N, E> (is_directed);
   ifstream file;
   file.open(fileName);
   int n, e;
   file >> n >> e;
-  cout << n << ' ' << e << endl;
   for (int i = 0; i < n; i++) {
     N tag;
     float x, y;
     file >> tag >> x >> y;
-    cout << tag << ' '  << x << ' ' << y << endl;
+    graph -> addNode(tag, x, y);
   }
   for (int i = 0; i < e; i++) {
     N u, v;
     E w;
     file >> u >> v >> w;
-    cout << u << ' ' << v << ' ' << w << endl;
+    graph -> addEdge(u, v, w);
   }
 }
 

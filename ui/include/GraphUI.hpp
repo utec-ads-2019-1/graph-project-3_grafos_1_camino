@@ -11,13 +11,13 @@ class GraphUI {
   public:
     GraphUI (sf::Font*& font);
     ~GraphUI ();
-    void update (sf::RenderWindow*& window, int currentView);
+    void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font, int currentView);
     void draw (sf::RenderWindow*& window, int currentView);
   private:
     Grid* grid;
     LoadGraph* loadGraph;
     int currentGraph = -1;
-    bool loaded = false;
+    bool loading = false;
     Graph <char, int>* graphFile0;
     GraphView <char, int>* graphView0;
     Graph <char, float>* graphFile1;

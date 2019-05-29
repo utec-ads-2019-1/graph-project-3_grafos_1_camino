@@ -21,37 +21,37 @@ GraphUI::~GraphUI () {
   delete graphView1;
 }
 
-void GraphUI::update (sf::RenderWindow*& window, int currentView) {
-  if (not loaded) {
+void GraphUI::update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font, int currentView) {
+  if (loading) {
     if (currentGraph == 0) {
       loadFromFile <char, int> ("./ui/input/graph-01.txt", graphFile0, false);
-      graphView0 = new GraphView <char, int> (graphFile0);
-      loaded = true;
+      graphView0 = new GraphView <char, int> (graphFile0, font);
+      loading = false;
     }
     if (currentGraph == 1) {
       loadFromFile <char, float> ("./ui/input/graph-02.txt", graphFile1, false);
-      graphView1 = new GraphView <char, float> (graphFile1);
-      loaded = true;
+      graphView1 = new GraphView <char, float> (graphFile1, font);
+      loading = false;
     }
   }
-  if (currentView == int(MENU_INDEX::LOAD_FILE) or not loaded) {
-    int index = loadGraph -> update(window);
+  if (currentView == int(MENU_INDEX::LOAD_FILE) or currentView == -1) {
+    int index = loadGraph -> update(window, event);
     if (index != -1) {
       currentGraph = index;
-      loaded = false;
+      loading = true;
     }
   } else {
-    if (currentGraph == 0) graphView0 -> update(window, currentView);
-    if (currentGraph == 1) graphView0 -> update(window, currentView);
+    if (currentGraph == 0) graphView0 -> update(window, event, font, currentView);
+    if (currentGraph == 1) graphView1 -> update(window, event, font, currentView);
   }
 }
 
 void GraphUI::draw (sf::RenderWindow*& window, int currentView) {
-  if (currentView == int(MENU_INDEX::LOAD_FILE) or currentView == -1 or currentGraph == -1) {
+  if (currentView == int(MENU_INDEX::LOAD_FILE) or currentView == -1) {
     loadGraph -> draw(window);
   } else {
     grid -> draw(window);
     if (currentGraph == 0) graphView0 -> draw(window, currentView);
-    if (currentGraph == 1) graphView0 -> draw(window, currentView);
+    if (currentGraph == 1) graphView1 -> draw(window, currentView);
   }
 }

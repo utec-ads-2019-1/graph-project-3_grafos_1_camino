@@ -34,7 +34,7 @@ LoadGraph::~LoadGraph () {
   fileTitle.clear();
 }
 
-int LoadGraph::update (sf::RenderWindow*& window) {
+int LoadGraph::update (sf::RenderWindow*& window, const sf::Event& event) {
   if (indexFileSelected != -1) {
     fileBoxes[indexFileSelected] ->  setFillColor(FILE_COLOR);
     indexFileSelected = -1;
@@ -46,7 +46,8 @@ int LoadGraph::update (sf::RenderWindow*& window) {
       indexFileSelected = i;
     }
   }
-  if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) return indexFileSelected;
+  if (event.type == sf::Event::MouseButtonPressed and
+      event.mouseButton.button == sf::Mouse::Left) return indexFileSelected;
   return -1;
 }
 

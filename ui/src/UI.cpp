@@ -33,7 +33,7 @@ void UI::run () {
 }
 
 void UI::update () {
-  graphUI -> update(window, currentView);
+  graphUI -> update(window, event, font, currentView);
   int currentOption = menu -> update(window);
   if (currentOption != -1) currentView = currentOption;
 }
@@ -53,10 +53,3 @@ void UI::handleWindowEvents () {
     }
   }
 }
-
-/*
-
-void UI::drawConsole () {
-  drawRect(sf::Vector2f(CONSOLE_WIDTH, CONSOLE_HEIGHT), sf::Vector2f(CONSOLE_POS_X, CONSOLE_POS_Y), OPTION_COLOR, CHARDS_THICKNESS, true);
-}
-*/
