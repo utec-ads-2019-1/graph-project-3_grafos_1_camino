@@ -32,6 +32,9 @@ class Graph {
     // Elvis
     bool addNode (N tag, double x, double y) {
       if (findNode(tag)) return false;
+      for (auto it = nodeList.begin(); it != nodeList.end(); it++ ){
+        if (it -> getX() == x && it -> getY() == y) return false;
+      }
       node newNode = node(tag,x,y);
       set <N> AdjNodes;
       adjList.insert({newNode.getTag(), AdjNodes});
@@ -120,7 +123,10 @@ class Graph {
     }
 
     //Elvis
-    int getDegree (N tag) { return getOutDegree(tag); }
+    int getDegree (N tag) { 
+
+      return getOutDegree(tag); 
+    }
     
     //Elvis
     int getOutDegree (N tag){
@@ -137,19 +143,42 @@ class Graph {
       return inDegree; 
     }
 
-
-
     // Daniel
     self Prim () {
-      if (is_directed) throw "The graph must be undirected";
-      self mst(is_directed);
+      if (is_directed) throw "The graph must be undirected";    
+      self mst(is_directed);          
       return move(mst);
     }
-
     // Elvis
     self Kruskal () {
       if (is_directed) throw "The graph must be undirected";
       self mst(is_directed);
+      set <N> nodes;
+      auto itSet = edgeList.begin();
+      int count = nodeList.size();
+      pair <N, N> pairNodes;
+      while (count > 0){
+        pairNodes = itSet->getNodes();
+        int flag0 = 0, flag1 = 0;
+        if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
+        if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
+        if ((flag0 + flag1) > 1){
+          itSet++;
+          continue;
+        }
+        if(flag0){
+          nodes.insert(pairNodes.first);
+          mst.addNode(pairNodes.first);
+          count--;
+        }
+        if(flag1){
+          nodes.insert(pairNodes.second);
+          mst.addNode(pairNodes.second);
+          count--;
+        }
+        mst.addEdge(pairNodes.first, pairNodes.second, itSet->getWeight());
+        itSet++;
+      }  
       return move(mst);
     }
 

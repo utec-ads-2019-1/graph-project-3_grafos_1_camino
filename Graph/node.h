@@ -7,8 +7,8 @@ class Node {
     Node () {};
     Node (N tag, double x, double y): tag(tag), x(x), y(y) {}
     N getTag () const { return tag; }
-    double getX () { return x; }
-    double getY () { return y; }
+    double getX () const { return x; }
+    double getY () const { return y; }
     bool operator < (const Node& other) const { return tag < other.tag; }
 
   private:

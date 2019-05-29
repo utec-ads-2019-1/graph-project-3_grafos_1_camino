@@ -8,8 +8,8 @@ using namespace std;
 int main (int argc, char *argv[]) {
   try {
     Graph <char, int>* graph = new Graph <char, int> (false);
-    if (graph -> addNode('a', 0.0, 0.0)) cout<< "se creo el nodo a"<<endl;
-    if (graph -> addNode('b', 1.1, 1.1)) cout<< "se creo el nodo b"<<endl;
+    if (graph -> addNode('d', 0.0, 0.0)) cout<< "se creo el nodo d"<<endl;
+    if (graph -> addNode('b', 1.2, 1.3)) cout<< "se creo el nodo b"<<endl;
     if (graph -> addNode('c', 1.1, 1.1)) cout<< "se creo el nodo c"<<endl;
     if (graph -> addNode('d', 1.1, 1.1)) cout<< "se creo el nodo d"<<endl;
     if (graph -> addNode('e', 1.1, 1.1)) cout<< "se creo el nodo e"<<endl;
