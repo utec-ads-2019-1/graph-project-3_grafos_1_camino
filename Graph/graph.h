@@ -44,7 +44,7 @@ public:
       return true;
     }
 
-    // Elvis [Revisar]
+    // Elvis
     bool deleteNode (N tag) {
       if (!findNode(tag)) return false;
       auto node = adjList.find(tag);
@@ -57,8 +57,6 @@ public:
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
         if (i -> getTag() == tag) nodeList.erase(tag);
       }
-      // esta condicional no va
-      if (!is_directed)  return true;
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
         itMap = adjList.find(i);
@@ -68,7 +66,7 @@ public:
       return true;
     }
 
-    // Daniel [Revisar]
+    // Daniel
     bool addEdge (N from, N to, E weight) {
       if(findEdge(from,to))
         return false;
@@ -76,94 +74,47 @@ public:
         return false;
       edge newEdge1 =  edge(from,to,weight);
       edgeList.insert(newEdge1);
-      // Lo de abajo sería más entendible simplemente poniendo
-      // adjList[from].insert(to);
-      // adjList_Trans[to].insert(from);
-      auto it = adjList.find(from);
-      if (it != adjList.end())
-        it->second.insert(to);
-      it = adjList_Trans.find(to);
-      if (it != adjList.end())
-        it->second.insert(from);
+      adjList[from].insert(to);
+      adjList_Trans[to].insert(from);
       if(!is_directed){
         edge newEdge2 =  edge(to,from,weight);
         edgeList.insert(newEdge2);
-        auto it = adjList.find(to);
-        if (it != adjList.end())
-          it->second.insert(from);
-        // Tienes adjList[to].insert(from)
-        // Falta
+        adjList[to].insert(from);
         adjList_Trans[from].insert(to);
       }
       return true;
-
     }
 
-    // Daniel [Revisar]
+    // Daniel
     bool deleteEdge (N from, N to) {
-      if(!findEdge(from,to)){
-            return false;}
-        else{ // Else innecesario
-            if(is_directed){
-                // Equivalente
-                // adjList[from].erase(to);
-                // Pues ya sabes que existe edge (from, to)
-                auto it = adjList.find(from);
-                if (it != adjList.end()){
-                    auto it2 = (it->second).find(to);
-                    (it->second).erase(it2);
-                }
-                // Equivalente
-                // adjList_Trans[to].erase(from)
-                it = adjList_Trans.find(to);
-                if (it != adjList_Trans.end()){
-                    auto it3 = (it->second).find(from);
-                    (it->second).erase(it3);
-                }
-                edge* del = findEdge(from,to);
-                auto itr = edgeList.find(*del);
-                edgeList.erase(itr);
-            } else{
-                // Estas haciendo
-                // adjList[from].erase(to);
-                // adjList[to].erase(from)
-                // Falta
-                // adjList_Trans[from].erase(to);
-                // adjList_Trans[to].erase(from);
-                auto it = adjList.find(from);
-                if (it != adjList.end()){
-                    auto it2 = it->second.find(to);
-                    it->second.erase(it2);
-                }
-                it = adjList.find(to);
-                if (it != adjList.end()){
-                    auto it3 = (it->second).find(from);
-                    (it->second).erase(it3);
-                }
+            if(!findEdge(from,to))
+            return false;
+      if(is_directed) {
+          adjList[from].erase(to);
+          adjList_Trans[to].erase(from);
+          edge* del = findEdge(from,to);
+          auto itr = edgeList.find(*del);
+          edgeList.erase(itr);
+      } else{
+          adjList[from].erase(to);
+          adjList[to].erase(from);
+          adjList_Trans[from].erase(to);
+          adjList_Trans[to].erase(from);
 
-                auto itr = edgeList.begin();
-
-                while (itr != edgeList.end()){
-                    edge ed = *itr;
-
-                    if(ed.getNodes().first==from and ed.getNodes().second==to){
-                        edgeList.erase(itr);
-                    }
-                    if(ed.getNodes().first==to and ed.getNodes().second==from){
-                        edgeList.erase(itr);
-                    }
-
-                    itr++;
-                }
-                // Estas dos lineas de abajo no hacen lo mismo que el while de
-                // arriba ?
-                edgeList.erase(edgeList.find(*findEdge(from,to)));
-                edgeList.erase(edgeList.find(*findEdge(to,from)));
-            }
-            return true;
-        }
-
-    }
+          auto itr = edgeList.begin();
+          while (itr != edgeList.end()){
+              edge ed = *itr;
+              if(ed.getNodes().first==from and ed.getNodes().second==to){
+                  edgeList.erase(itr);
+              }
+              if(ed.getNodes().first==to and ed.getNodes().second==from){
+                  edgeList.erase(itr);
+              }
+              itr++;     
+          }
+      }  
+      return true;
+   }
 
     // Elvis
     node* findNode (N tag) {
