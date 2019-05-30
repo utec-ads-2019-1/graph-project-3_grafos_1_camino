@@ -33,6 +33,9 @@ public:
     // Elvis
     bool addNode (N tag, double x, double y) {
       if (findNode(tag)) return false;
+      for (auto it = nodeList.begin(); it != nodeList.end(); it++ ){
+        if (it -> getX() == x && it -> getY() == y) return false;
+      }
       node newNode = node(tag,x,y);
       set <N> AdjNodes;
       adjList.insert({newNode.getTag(), AdjNodes});
@@ -41,32 +44,29 @@ public:
       return true;
     }
 
-    // Elvis [Revisar]
+    // Elvis
     bool deleteNode (N tag) {
       if (!findNode(tag)) return false;
       auto node = adjList.find(tag);
-      auto it = adjList.find(tag);
-      for (auto i : node -> second){
-        it = adjList.find(i);
-        it->second.erase(tag);
+      auto itMap = adjList.find(tag);
+      for (auto itSet : node -> second){
+        itMap = adjList.find(itSet);
+        itMap->second.erase(tag);
       }
       adjList.erase(tag);
-      // más seguro nodeList.erase(tag);
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
-        if (i -> getTag() == tag) nodeList.erase(i);
+        if (i -> getTag() == tag) nodeList.erase(tag);
       }
-      // esta condicional no va
-      if (!is_directed)  return true;
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
-        it = adjList.find(i);
-        it->second.erase(tag);
+        itMap = adjList.find(i);
+        itMap->second.erase(tag); 
       }
       adjList_Trans.erase(tag);
       return true;
     }
 
-    // Daniel [Revisar]
+    // Daniel
     bool addEdge (N from, N to, E weight) {
       if(findEdge(from,to))
         return false;
@@ -74,108 +74,58 @@ public:
         return false;
       edge newEdge1 =  edge(from,to,weight);
       edgeList.insert(newEdge1);
-      // Lo de abajo sería más entendible simplemente poniendo
-      // adjList[from].insert(to);
-      // adjList_Trans[to].insert(from);
-      auto it = adjList.find(from);
-      if (it != adjList.end())
-        it->second.insert(to);
-      it = adjList_Trans.find(to);
-      if (it != adjList.end())
-        it->second.insert(from);
+      adjList[from].insert(to);
+      adjList_Trans[to].insert(from);
       if(!is_directed){
         edge newEdge2 =  edge(to,from,weight);
         edgeList.insert(newEdge2);
-        auto it = adjList.find(to);
-        if (it != adjList.end())
-          it->second.insert(from);
-        // Tienes adjList[to].insert(from)
-        // Falta
+        adjList[to].insert(from);
         adjList_Trans[from].insert(to);
       }
       return true;
-
     }
 
-    // Daniel [Revisar]
+    // Daniel
     bool deleteEdge (N from, N to) {
-      if(!findEdge(from,to)){
-            return false;}
-        else{ // Else innecesario
-            if(is_directed){
-                // Equivalente
-                // adjList[from].erase(to);
-                // Pues ya sabes que existe edge (from, to)
-                auto it = adjList.find(from);
-                if (it != adjList.end()){
-                    auto it2 = (it->second).find(to);
-                    (it->second).erase(it2);
-                }
-                // Equivalente
-                // adjList_Trans[to].erase(from)
-                it = adjList_Trans.find(to);
-                if (it != adjList_Trans.end()){
-                    auto it3 = (it->second).find(from);
-                    (it->second).erase(it3);
-                }
-                edge* del = findEdge(from,to);
-                auto itr = edgeList.find(*del);
-                edgeList.erase(itr);
-            } else{
-                // Estas haciendo
-                // adjList[from].erase(to);
-                // adjList[to].erase(from)
-                // Falta
-                // adjList_Trans[from].erase(to);
-                // adjList_Trans[to].erase(from);
-                auto it = adjList.find(from);
-                if (it != adjList.end()){
-                    auto it2 = it->second.find(to);
-                    it->second.erase(it2);
-                }
-                it = adjList.find(to);
-                if (it != adjList.end()){
-                    auto it3 = (it->second).find(from);
-                    (it->second).erase(it3);
-                }
+            if(!findEdge(from,to))
+            return false;
+      if(is_directed) {
+          adjList[from].erase(to);
+          adjList_Trans[to].erase(from);
+          edge* del = findEdge(from,to);
+          auto itr = edgeList.find(*del);
+          edgeList.erase(itr);
+      } else{
+          adjList[from].erase(to);
+          adjList[to].erase(from);
+          adjList_Trans[from].erase(to);
+          adjList_Trans[to].erase(from);
 
-                auto itr = edgeList.begin();
-
-                while (itr != edgeList.end()){
-                    edge ed = *itr;
-
-                    if(ed.getNodes().first==from and ed.getNodes().second==to){
-                        edgeList.erase(itr);
-                    }
-                    if(ed.getNodes().first==to and ed.getNodes().second==from){
-                        edgeList.erase(itr);
-                    }
-
-                    itr++;
-                }
-                // Estas dos lineas de abajo no hacen lo mismo que el while de
-                // arriba ?
-                edgeList.erase(edgeList.find(*findEdge(from,to)));
-                edgeList.erase(edgeList.find(*findEdge(to,from)));
-            }
-            return true;
-        }
-
-    }
+          auto itr = edgeList.begin();
+          while (itr != edgeList.end()){
+              edge ed = *itr;
+              if(ed.getNodes().first==from and ed.getNodes().second==to){
+                  edgeList.erase(itr);
+              }
+              if(ed.getNodes().first==to and ed.getNodes().second==from){
+                  edgeList.erase(itr);
+              }
+              itr++;     
+          }
+      }  
+      return true;
+   }
 
     // Elvis
     node* findNode (N tag) {
-      auto it_set = adjList.find(tag);
-      if ( it_set != adjList.end()){
-        for ( auto it_set : nodeList){
-          if (it_set.getTag() == tag){
-            node* ret = new node(it_set.getTag(), it_set.getX(), it_set.getY());
-            return ret;
-          }
+      for ( auto it_set : nodeList){
+        if (it_set.getTag() == tag){
+          node* ret = &it_set;
+          return ret;
         }
       }
-      return nullptr;
-    }
+      return nullptr;  
+     }  
 
     // Daniel
     edge* findEdge (N from, N to) {
@@ -299,13 +249,58 @@ public:
       }
       return move(mst);
     }
-
     // Elvis
     self Kruskal () {
-        if (is_directed) throw "The graph must be undirected";
-        self mst(is_directed);
-        return move(mst);
-    }
+      if (is_directed) throw "The graph must be undirected";
+      self mst(is_directed);
+      set <N> nodes;
+      auto itSet = edgeList.begin();
+      pair <N, N> pairNodes;
+      bool ready = false;
+      while (itSet!= edgeList.end() ){
+          pairNodes = itSet -> getNodes();
+          int flag0 = 0, flag1 = 0;
+          if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
+          if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
+          if ((flag0 + flag1) > 1){
+              map <N, int> bfsP =  mst.BFS(pairNodes.first);
+              bool is = false;
+              for (auto it: bfsP){
+                  if (it.first == pairNodes.second){
+                      is = true;
+                      break;
+                  }
+              }
+              if (!is){
+                  mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
+              }
+              itSet++;
+              itSet++;
+              if (itSet == edgeList.end()) break;
+              continue;
+          }
+          if(flag0 == 0){
+              node* node = findNode(pairNodes.first);
+              nodes.insert(node -> getTag());
+              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+          }
+          if (flag1 == 0){
+              node* node = findNode(pairNodes.second);
+              nodes.insert(node -> getTag());
+              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+          }
+          mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
+          itSet++;
+          itSet++;
+      }
+      for (node i:nodeList){
+          if (nodes.find(i.getTag()) == nodes.end()){
+              nodes.insert(i.getTag());
+              mst.addNode(i.getTag(), i.getX(), i.getY());
+          }
+      }
+      return move(mst);
+      }
 
     // Julio
     map <N, int> BFS (N source) {
