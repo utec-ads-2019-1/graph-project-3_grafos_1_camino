@@ -2,6 +2,7 @@
 #define CONFIG_HPP
 
 #include <fstream>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "../../Graph/graph.h"
 
@@ -77,6 +78,8 @@ static std::vector <sf::Color> GRAPH_COLORS = {
   sf::Color::Magenta,
   sf::Color::Cyan
 };
+const sf::Color EDGE_COLOR = sf::Color::Red;
+const float EDGE_THICK = 5.f;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {
@@ -97,6 +100,29 @@ static sf::Vector2f getWindowCoordinates (float x, float y) {
   float windowX = ORIGIN_X + (x * GRID_INTERVAL) / 10.f;
   float windowY = ORIGIN_Y + (y * GRID_INTERVAL) / 10.f;
   return sf::Vector2f(windowX, windowY);
+}
+
+static sf::Vertex* buildLine (sf::Vector2f from, sf::Vector2f to, sf::Color background, float thickness) {
+  sf::Vector2f direction = to - from;
+  sf::Vector2f unitDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+  sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
+  sf::Vector2f offset = (thickness / 2.f) * unitPerpendicular;
+
+  sf::Vertex* vertices = new sf::Vertex[4];
+  vertices[0].position = from + offset;
+  vertices[1].position = to + offset;
+  vertices[2].position = to - offset;
+  vertices[3].position = from - offset;
+  for (int i=0; i < 4; ++i) vertices[i].color = background;
+  return vertices;
+
+  /*  sf::VertexArray* line = new sf::VertexArray(sf::LinesStrip, 2);
+      (*line)[0].position = from;
+      (*line)[0].color = background;
+      (*line)[1].position = to;
+      (*line)[1].color = background;
+      return line;
+      */
 }
 
 static sf::CircleShape* buildCircle (float radius, sf::Vector2f position, sf::Color background) {
