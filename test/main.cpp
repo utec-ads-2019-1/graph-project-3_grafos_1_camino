@@ -76,7 +76,7 @@ void testDFS () {
 }
 
 void testConex () {
-  if (!graph -> isConex()) cerr << "isConex is not working" << endl;
+  if (!graph -> isConvex()) cerr << "isConex is not working" << endl;
 }
 
 void testBipartite () {
