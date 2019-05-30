@@ -16,6 +16,9 @@ class Edge {
       if (from != other.from) return from < other.from;
       return to < other.to;
     }
+    bool operator == (const Edge& other) const {
+        return  from == other.from and to == other.to;
+    }
 
   private:
     E weight;
