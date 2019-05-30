@@ -410,7 +410,7 @@ public:
       return {nComponents, component};
     }
 
-    bool isConvex () { return getStronglyConnectedComponents().first == 1; }
+    bool isConex () { return getStronglyConnectedComponents().first == 1; }
     void setDensityParameter (double density) const { denseParameter = density; }
     int getNumberOfNodes () const { return nodeList.size(); }
     int getNumberOfEdges () const { return edgeList.size(); }

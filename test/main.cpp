@@ -67,6 +67,7 @@ void testPrim () {
 
 void testKruskal () {
   Graph <char, float> mst = graph -> Kruskal();
+  set <Node <char>> nodes = mst.getNodeList();
   if (!mst.findNode('a')) cerr << "Kruskal is not working" << endl;
   if (!mst.findNode('b')) cerr << "Kruskal is not working" << endl;
   if (!mst.findNode('c')) cerr << "Kruskal is not working" << endl;
@@ -81,21 +82,33 @@ void testBFS () {
   map <char, int> levels = graph -> BFS('a');
   if (levels['a'] != 0) cerr << "BFS is not working for 'a'" << endl;
   if (levels['b'] != 1) cerr << "BFS is not working for 'b'" << endl;
-  if (levels['c'] != 1) cerr << "BFS is not working for 'c'" << endl;
+  if (levels['c'] != 2) cerr << "BFS is not working for 'c'" << endl;
+  if (levels['d'] != 2) cerr << "BFS is not working for 'd'" << endl;
+  if (levels['e'] != 2) cerr << "BFS is not working for 'e'" << endl;
+  if (levels['f'] != 3) cerr << "BFS is not working for 'f'" << endl;
+  if (levels['g'] != 4) cerr << "BFS is not working for 'g'" << endl;
 }
 
 void testDFS () {
   map <char, pair <int, int>> times = graph -> DFS('a');
   if (times['a'].first != 0) cerr << "DFS is not working for 'a'" << endl;
-  if (times['a'].second != 5) cerr << "DFS is not working for 'a'" << endl;
+  if (times['a'].second != 13) cerr << "DFS is not working for 'a'" << endl;
   if (times['b'].first != 1) cerr << "DFS is not working for 'b'" << endl;
-  if (times['b'].second != 4) cerr << "DFS is not working for 'b'" << endl;
+  if (times['b'].second != 12) cerr << "DFS is not working for 'b'" << endl;
   if (times['c'].first != 2) cerr << "DFS is not working for 'c'" << endl;
   if (times['c'].second != 3) cerr << "DFS is not working for 'c'" << endl;
+  if (times['d'].first != 4) cerr << "DFS is not working for 'd'" << endl;
+  if (times['d'].second != 11) cerr << "DFS is not working for 'd'" << endl;
+  if (times['e'].first != 5) cerr << "DFS is not working for 'e'" << endl;
+  if (times['e'].second != 10) cerr << "DFS is not working for 'e'" << endl;
+  if (times['f'].first != 6) cerr << "DFS is not working for 'f'" << endl;
+  if (times['f'].second != 9) cerr << "DFS is not working for 'f'" << endl;
+  if (times['g'].first != 7) cerr << "DFS is not working for 'g'" << endl;
+  if (times['g'].second != 8) cerr << "DFS is not working for 'g'" << endl;
 }
 
 void testConex () {
-  if (!graph -> isConvex()) cerr << "isConex is not working" << endl;
+  if (graph -> isConex()) cerr << "isConex is not working" << endl;
 }
 
 void testBipartite () {
@@ -104,11 +117,16 @@ void testBipartite () {
 
 void testSCC () {
   pair <int, map <char, int>> ret = graph -> getStronglyConnectedComponents ();
-  if (ret.first != 1) cerr << "SCC is not working" << endl;
+  if (ret.first != 2) cerr << "SCC is not giving the correct number of SCC" << endl;
   map <char, int> components = ret.second;
-  if (components['a'] != components['b']) cerr << "SCC is not working" << endl;
-  if (components['a'] != components['c']) cerr << "SCC is not working" << endl;
-  if (components['b'] != components['c']) cerr << "SCC is not working" << endl;
+  if (components['a'] != 1) cerr << "SCC is not working" << endl;
+  if (components['b'] != 1) cerr << "SCC is not working" << endl;
+  if (components['c'] != 1) cerr << "SCC is not working" << endl;
+  if (components['d'] != 1) cerr << "SCC is not working" << endl;
+  if (components['e'] != 1) cerr << "SCC is not working" << endl;
+  if (components['f'] != 1) cerr << "SCC is not working" << endl;
+  if (components['g'] != 1) cerr << "SCC is not working" << endl;
+  if (components['h'] != 2) cerr << "SCC is not working" << endl;
 }
 
 void testDeleteNodeAndEdge () {
@@ -123,8 +141,8 @@ int main (int argc, char *argv[]) {
     testAddEdge();
     testFindEdge();
     testProperties();
-    // testPrim(); Not working
-    testKruskal(); //Not implemented
+    // testPrim(); // Not working
+    testKruskal();
     testDFS();
     testBFS();
     testConex();

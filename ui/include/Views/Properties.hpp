@@ -8,11 +8,11 @@ class Properties: public View <N, E> {
   public:
     Properties (Graph <N, E>*& graph, std::string label, sf::Font*& font):
       View <N, E> (graph, label, font) {
-      bool isConvex = this -> graph -> isConvex();
-      if (isConvex) {
-        this -> console -> add("convex", font, false);
+      bool isConex = this -> graph -> isConex();
+      if (isConex) {
+        this -> console -> add("conex", font, false);
       } else {
-        this -> console -> add("!convex", font, false);
+        this -> console -> add("!conex", font, false);
       }
     }
     ~Properties () {
