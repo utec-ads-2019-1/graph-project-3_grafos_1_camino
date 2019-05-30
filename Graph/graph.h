@@ -47,10 +47,10 @@ class Graph {
     bool deleteNode (N tag) {
       if (!findNode(tag)) return false;
       auto node = adjList.find(tag);
-      auto it = adjList.find(tag);
-      for (auto i : node -> second){
-        it = adjList.find(i);
-        it->second.erase(tag);
+      auto itMap = adjList.find(tag);
+      for (auto itSet : node -> second){
+        itMap = adjList.find(itSet);
+        itMap->second.erase(tag);
       }
       adjList.erase(tag);
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
@@ -59,8 +59,8 @@ class Graph {
       if (!is_directed)  return true;
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
-        it = adjList.find(i);
-        it->second.erase(tag); 
+        itMap = adjList.find(i);
+        itMap->second.erase(tag); 
       }
       adjList_Trans.erase(tag);
       return true;
@@ -83,15 +83,12 @@ class Graph {
 
     // Elvis
     node* findNode (N tag) {
-      auto it_set = adjList.find(tag);
-        if ( it_set != adjList.end()){
-          for ( auto it_set : nodeList){
-            if (it_set.getTag() == tag){
-                node* ret = &it_set;
-                return ret;
-            }
-          }
+      for ( auto it_set : nodeList){
+        if (it_set.getTag() == tag){
+          node* ret = &it_set;
+          return ret;
         }
+      }
       return nullptr;  
      }  
     // Daniel
@@ -158,7 +155,7 @@ class Graph {
       int count = nodeList.size();
       pair <N, N> pairNodes;
       while (count > 0){
-        pairNodes = itSet->getNodes();
+        pairNodes = itSet -> getNodes();
         int flag0 = 0, flag1 = 0;
         if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
         if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
@@ -166,14 +163,16 @@ class Graph {
           itSet++;
           continue;
         }
-        if(flag0){
+        if(flag0 == 1){
+          node* node = findNode(pairNodes.first);
           nodes.insert(pairNodes.first);
-          mst.addNode(pairNodes.first);
+          mst.addNode(pairNodes.first, node -> getX(), node -> getY());
           count--;
         }
-        if(flag1){
+        if(flag1 == 1){
+          node* node = findNode(pairNodes.second);
           nodes.insert(pairNodes.second);
-          mst.addNode(pairNodes.second);
+          mst.addNode(pairNodes.second, node -> getX(), node -> getY());
           count--;
         }
         mst.addEdge(pairNodes.first, pairNodes.second, itSet->getWeight());
