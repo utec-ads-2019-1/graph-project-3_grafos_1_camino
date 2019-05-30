@@ -9,8 +9,8 @@ class Edge {
   public:
     Edge () {}
     Edge (N from, N to, E weight): from(from), to(to), weight(weight) {}
-    E getWeight () { return weight; }
-    std::pair <N, N> getNodes () { return {from, to}; }
+    E getWeight () const { return weight; }
+    std::pair <N, N> getNodes () const { return {from, to}; }
     bool operator < (const Edge& other) const {
       if (weight != other.weight) return weight < other.weight;
       if (from != other.from) return from < other.from;
