@@ -6,7 +6,8 @@
 #include <vector>
 #include <set>
 #include <map>
-
+#include <queue>
+#include <typeinfo>
 #include "node.h"
 #include "edge.h"
 
@@ -21,12 +22,9 @@ class Graph {
 
 
     Graph (bool is_directed): is_directed(is_directed) {
-      cout << "El grafo se creo" << endl;
     }
 
     ~Graph () {
-      // TO DO
-      cout << "Elim=inar lo que se tenga que eliminar" << endl;
     }
 
     // Elvis
@@ -40,7 +38,7 @@ class Graph {
       adjList.insert({newNode.getTag(), AdjNodes});
       adjList_Trans.insert({newNode.getTag(), AdjNodes});
       nodeList.insert(newNode);
-      return true;  
+      return true;
     }
 
     // Elvis
@@ -69,16 +67,87 @@ class Graph {
     // Daniel
     bool addEdge (N from, N to, E weight) {
       // ADD EDGE
-      // If is_directed == false -> addEdge(to, from, weight)
-      // RETURNS FALSE IF THE VERTEX ALREADY EXISTS
+      if(findEdge(from,to))
+        return false;
+      if(from == to)
+        return false;
+      edge newEdge1 =  edge(from,to,weight);
+      edgeList.insert(newEdge1);
+      auto it = adjList.find(from);
+      if (it != adjList.end())
+        it->second.insert(to);
+      it = adjList_Trans.find(to);
+      if (it != adjList.end())
+        it->second.insert(from);
+      if(!is_directed){
+        edge newEdge2 =  edge(to,from,weight);
+        edgeList.insert(newEdge2);
+        auto it = adjList.find(to);
+        if (it != adjList.end())
+          it->second.insert(from);
+
+      }
+
       return true;
+
     }
 
     // Daniel
     bool deleteEdge (N from, N to) {
-      // Tener cuidado con actualizar las dependencias
-      // Retornar false si el edge no existia
-      return true;
+      if(!findEdge(from,to))
+        return false;
+      else{
+        if(is_directed){
+          auto it = adjList.find(from);
+          if (it != adjList.end()){
+            auto it2 = (it->second).find(to);
+            (it->second).erase(it2);
+          }
+          it = adjList_Trans.find(to);
+          if (it != adjList_Trans.end()){
+            auto it3 = (it->second).find(from);
+            (it->second).erase(it3);
+          }
+
+          for (auto itr = edgeList.begin(); itr != edgeList.end(); itr++)
+          {
+            edge ed = *itr;
+            if(ed.getNodes().first==from and ed.getNodes().second==to){
+              edgeList.erase(itr);
+              break;
+            }
+          }
+
+        } else{
+          auto it = adjList.find(from);
+          if (it != adjList.end()){
+            auto it2 = it->second.find(to);
+            it->second.erase(it2);
+          }
+          it = adjList.find(to);
+          if (it != adjList.end()){
+            auto it3 = (it->second).find(from);
+            (it->second).erase(it3);
+          }
+
+          auto itr = edgeList.begin();
+
+          while (itr != edgeList.end()){
+            edge ed = *itr;
+
+            if(ed.getNodes().first==from and ed.getNodes().second==to){
+              edgeList.erase(itr);
+            }
+            if(ed.getNodes().first==to and ed.getNodes().second==from){
+              edgeList.erase(itr);
+            }
+
+            itr++;
+          }
+        }
+        return true;
+      }
+
     }
 
     // Elvis
@@ -91,11 +160,17 @@ class Graph {
       }
       return nullptr;  
      }  
+
     // Daniel
     edge* findEdge (N from, N to) {
-      // Similar a findVertex
-      node* ret = nullptr;
-      return ret;
+      for (auto i : edgeList){
+        if(i.getNodes().first==from and i.getNodes().second==to){
+          edge* ret = &i;
+          return ret;
+        }
+      }
+
+      return nullptr;
     }
 
     // Julio
@@ -120,30 +195,75 @@ class Graph {
     }
 
     //Elvis
-    int getDegree (N tag) { 
-
-      return getOutDegree(tag); 
-    }
-    
-    //Elvis
     int getOutDegree (N tag){
       if (!findNode(tag)) throw "The node doesn't belong to the graph";
       auto node = adjList.find(tag);
       int outDegree = node -> second.size();
-      return outDegree; 
-    }   
+      return outDegree;
+    }
 
-    int getInDegree(N tag){  
+    int getInDegree(N tag){
       if (!findNode(tag)) throw "The node doesn't belong to the graph";
       auto node = adjList_Trans.find(tag);
       int inDegree = node -> second.size();
-      return inDegree; 
+      return inDegree;
     }
 
     // Daniel
-    self Prim () {
-      if (is_directed) throw "The graph must be undirected";    
-      self mst(is_directed);          
+    self Prim (N tag) {
+      if (is_directed) throw "The graph must be undirected";
+
+      self mst(is_directed);
+
+
+      node* current = findNode(tag);
+      set <N> currentNodes;
+
+      mst.addNode(current->getTag(),current->getX(),current->getY());
+      currentNodes.insert(tag);
+
+      int i = 1;
+      while (current){
+        vector<edge> availableEdges;
+        for (auto A : currentNodes){
+          for (auto it = adjList.begin();it != adjList.end();it++){
+            if(A == it->first){
+              for (auto B: it->second){
+                cout  <<  B << " ";
+                auto it2 = currentNodes.find(B);
+                if(it2!=currentNodes.end()){
+                } else{
+                  if(findEdge(A,B)){
+                    edge* ed  = findEdge(A,B);
+                    edge e = *ed;
+                    availableEdges.push_back(e);
+                  }
+                }
+              }
+            }
+
+          }
+
+
+        }
+        if(availableEdges.empty()){
+          current = nullptr;
+        } else{
+          edge* e = &availableEdges[0];
+          for(auto ed: availableEdges){
+            if(e->getWeight()>ed.getWeight())
+              e = &ed;
+          }
+          current = findNode(e->getNodes().second);
+          mst.addNode(current->getTag(),current->getX(),current->getY());
+          mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
+          currentNodes.insert(current->getTag());
+
+        }
+        availableEdges.clear();
+        i++;
+      }
+
       return move(mst);
     }
     // Elvis
@@ -152,34 +272,54 @@ class Graph {
       self mst(is_directed);
       set <N> nodes;
       auto itSet = edgeList.begin();
-      int count = nodeList.size();
       pair <N, N> pairNodes;
-      while (count > 0){
-        pairNodes = itSet -> getNodes();
-        int flag0 = 0, flag1 = 0;
-        if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
-        if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
-        if ((flag0 + flag1) > 1){
+      bool ready = false;
+      while (itSet!= edgeList.end() ){
+          pairNodes = itSet -> getNodes();
+          int flag0 = 0, flag1 = 0;
+          if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
+          if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
+          cout << itSet->getNodes().first  << itSet->getNodes().second << " \n";
+          if ((flag0 + flag1) > 1){
+              vector <pair <N,int> > bfsP =  mst.BFS(pairNodes.first);
+              bool is = false;
+              for (auto it: bfsP){
+                  if (it.first == pairNodes.second){
+                      is = true;
+                      break;
+                  }
+              }
+              if (!is){
+                  mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
+              }
+              itSet++;
+              itSet++;
+              if (itSet == edgeList.end()) break;
+              continue;
+          }
+          if(flag0 == 0){
+              node* node = findNode(pairNodes.first);
+              nodes.insert(node -> getTag());
+              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+          }
+          if (flag1 == 0){
+              node* node = findNode(pairNodes.second);
+              nodes.insert(node -> getTag());
+              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+          }
+          mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
           itSet++;
-          continue;
-        }
-        if(flag0 == 1){
-          node* node = findNode(pairNodes.first);
-          nodes.insert(pairNodes.first);
-          mst.addNode(pairNodes.first, node -> getX(), node -> getY());
-          count--;
-        }
-        if(flag1 == 1){
-          node* node = findNode(pairNodes.second);
-          nodes.insert(pairNodes.second);
-          mst.addNode(pairNodes.second, node -> getX(), node -> getY());
-          count--;
-        }
-        mst.addEdge(pairNodes.first, pairNodes.second, itSet->getWeight());
-        itSet++;
-      }  
+          itSet++;
+      }
+      for (node i:nodeList){
+          if (nodes.find(i.getTag()) == nodes.end()){
+              nodes.insert(i.getTag());
+              mst.addNode(i.getTag(), i.getX(), i.getY());
+          }
+      }
       return move(mst);
-    }
+      }
+
 
     // Julio
     // Retorno un vector de pares {etiqueta de un nodo, level de ese nodo}
@@ -197,18 +337,71 @@ class Graph {
       return ret;
     }
 
-    
+
     // Retorna si el grafo es conexo
     bool isConex () {
       return true;
     }
 
     // Leonidas
-    bool isBipartite () {}
+    pair <bool, map <N, bool>> getBipartiteAndColors () {
+      const bool BLACK = false;
+      const bool WHITE = true;
+      map <N, bool> color;
+      for (node current: this -> nodeList) {
+        N cur_tag = current.getTag();
+        if (color.count(cur_tag)) continue;
+        queue <N> Q;
+        Q.push(cur_tag);
+        color[cur_tag] = BLACK;
+        while (not Q.empty()) {
+          N u = Q.front();
+          Q.pop();
+          for (N v: adjList[u]) {
+            if (color.count(v) == 0) {
+              color[v] = (color[u] == BLACK) ? WHITE : BLACK;
+            } else if (color[u] == color[v]) return {false, map <N, bool> ()};
+          }
+          for (N v: adjList_Trans[u]) {
+            if (color.count(v) == 0) {
+              color[v] = (color[u] == BLACK) ? WHITE : BLACK;
+            } else if (color[u] == color[v]) return {false, map <N, bool> ()};
+          }
+        }
+      }
+      return {true, color};
+    }
 
     // Leonidas
-    bool isStronglyConnected () {
+    std::pair <bool, map <N, int>> getStronglyConnectedComponents () {
       // TO DO
+      return true;
+    }
+
+    set <node> getNodeList () const { return nodeList; }
+    set <edge> getEdgeList () const { return edgeList; }
+
+    void ImprimirGrafo(){
+
+      cout << "Imprimiendo nodos" << endl;
+      for(auto i:nodeList){
+        cout << i.getTag() << " ";
+      }
+      cout << endl;
+      cout << "Imprimiendo aristas" << endl;
+      for(auto i:edgeList){
+        cout << i.getNodes().first <<" "<< i.getNodes().second<< " "  << i.getWeight() << endl;;
+      }
+      cout << endl;
+
+      cout << "Imprimiendo la lista de adyacencia" << endl;
+      for (auto it = adjList.begin();it != adjList.end();it++){
+        cout << it->first<< " ";
+        for (auto i: it->second){
+          cout << i <<" ";
+        }
+        cout << endl;
+      }
     }
 
   private:
@@ -218,7 +411,7 @@ class Graph {
     set <edge> edgeList;
     map <N, set <N>> adjList;
     map <N, set <N>> adjList_Trans;
-    bool is_directed = false;
+    bool is_directed;
 };
 
 #endif
