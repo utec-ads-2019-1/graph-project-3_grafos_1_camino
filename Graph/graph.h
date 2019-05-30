@@ -330,7 +330,7 @@ public:
                 }
             }
         }
-        
+
         for (auto pp: d)ret.emplace_back(pp.first,pp.second);
         return ret;
     }
@@ -340,8 +340,24 @@ public:
     vector <pair <N, pair <int, int>>> dfs (N source) {
         if (!findNode(source)) throw "The node does not belong to the graph";
         vector <pair <N,pair <int, int>>> ret;
-        //completar
+        map <N, int> time_in;
+        map <N, int> time_out;
+        map <N, int> color;
+        dfsRec(source, time_in, time_out, color, 0);
+        for (auto pp: time_in) {
+            ret.push_back({pp.first, {time_in[pp.first], time_out[pp.second]}});
+        }
         return ret;
+    }
+                          
+    void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
+        time_in[source] = dfs_timer++;
+        color[source] = 1;
+        for (N u : adjList[source])
+            if (color[u] == 0)
+                dfsRec(u,time_in,time_out,color,dfs_timer);
+        color[source] = 2;
+        time_out[source] = dfs_timer++;
     }
 
 
