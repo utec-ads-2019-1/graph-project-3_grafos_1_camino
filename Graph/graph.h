@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <functional>
 #include <iostream>
 #include <typeinfo>
 #include <vector>
@@ -20,10 +21,13 @@ public:
     typedef Node <N> node;
     typedef Edge <N, E> edge;
 
-    Graph (bool is_directed): is_directed(is_directed) {
-    }
+    Graph (bool is_directed): is_directed(is_directed) {}
 
     ~Graph () {
+      nodeList.clear();
+      edgeList.clear();
+      adjList.clear();
+      adjList_Trans.clear();
     }
 
     // Elvis
@@ -37,7 +41,7 @@ public:
       return true;
     }
 
-    // Elvis
+    // Elvis [Revisar]
     bool deleteNode (N tag) {
       if (!findNode(tag)) return false;
       auto node = adjList.find(tag);
@@ -47,9 +51,11 @@ public:
         it->second.erase(tag);
       }
       adjList.erase(tag);
+      // más seguro nodeList.erase(tag);
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
         if (i -> getTag() == tag) nodeList.erase(i);
       }
+      // esta condicional no va
       if (!is_directed)  return true;
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
@@ -60,15 +66,17 @@ public:
       return true;
     }
 
-    // Daniel
+    // Daniel [Revisar]
     bool addEdge (N from, N to, E weight) {
-      // ADD EDGE
       if(findEdge(from,to))
         return false;
       if(from == to)
         return false;
       edge newEdge1 =  edge(from,to,weight);
       edgeList.insert(newEdge1);
+      // Lo de abajo sería más entendible simplemente poniendo
+      // adjList[from].insert(to);
+      // adjList_Trans[to].insert(from);
       auto it = adjList.find(from);
       if (it != adjList.end())
         it->second.insert(to);
@@ -81,24 +89,30 @@ public:
         auto it = adjList.find(to);
         if (it != adjList.end())
           it->second.insert(from);
-
+        // Tienes adjList[to].insert(from)
+        // Falta
+        adjList_Trans[from].insert(to);
       }
-
       return true;
 
     }
 
-    // Daniel
+    // Daniel [Revisar]
     bool deleteEdge (N from, N to) {
       if(!findEdge(from,to)){
             return false;}
-        else{
+        else{ // Else innecesario
             if(is_directed){
+                // Equivalente
+                // adjList[from].erase(to);
+                // Pues ya sabes que existe edge (from, to)
                 auto it = adjList.find(from);
                 if (it != adjList.end()){
                     auto it2 = (it->second).find(to);
                     (it->second).erase(it2);
                 }
+                // Equivalente
+                // adjList_Trans[to].erase(from)
                 it = adjList_Trans.find(to);
                 if (it != adjList_Trans.end()){
                     auto it3 = (it->second).find(from);
@@ -108,6 +122,12 @@ public:
                 auto itr = edgeList.find(*del);
                 edgeList.erase(itr);
             } else{
+                // Estas haciendo
+                // adjList[from].erase(to);
+                // adjList[to].erase(from)
+                // Falta
+                // adjList_Trans[from].erase(to);
+                // adjList_Trans[to].erase(from);
                 auto it = adjList.find(from);
                 if (it != adjList.end()){
                     auto it2 = it->second.find(to);
@@ -133,6 +153,8 @@ public:
 
                     itr++;
                 }
+                // Estas dos lineas de abajo no hacen lo mismo que el while de
+                // arriba ?
                 edgeList.erase(edgeList.find(*findEdge(from,to)));
                 edgeList.erase(edgeList.find(*findEdge(to,from)));
             }
@@ -147,7 +169,7 @@ public:
       if ( it_set != adjList.end()){
         for ( auto it_set : nodeList){
           if (it_set.getTag() == tag){
-            node* ret = &it_set;
+            node* ret = new node(it_set.getTag(), it_set.getX(), it_set.getY());
             return ret;
           }
         }
@@ -169,6 +191,7 @@ public:
 
     // Julio
     double getDensity () {
+        if (getNumberOfNodes() <= 1) throw "Division by zero";
         double density = 0.0;
         if (is_directed== true){
             density=(getNumberOfEdges()/(getNumberOfNodes()*(getNumberOfNodes()-1)));
@@ -244,7 +267,6 @@ public:
           for (auto it = adjList.begin();it != adjList.end();it++){
             if(A == it->first){
               for (auto B: it->second){
-                cout  <<  B << " ";
                 auto it2 = currentNodes.find(B);
                 if(it2!=currentNodes.end()){
                 } else{
@@ -286,19 +308,15 @@ public:
     }
 
     // Julio
-    // Retorno un vector de pares {etiqueta de un nodo, level de ese nodo}
-    vector <pair <N, int>> BFS (N source) {
+    map <N, int> BFS (N source) {
         if (!findNode(source)) throw "The node does not belong to the graph";
-        vector <pair <N, int>> ret;
-        //completar
         map <N, int > d;
-        int n = getNumberOfNodes();
         N s = source;
         queue<N> cola;
-        set<bool> used;
-
+        set<N> used;
         cola.push(s);
         used.insert(s);
+        d[s] = 0;
         while (!cola.empty()) {
             N v = cola.front();
             cola.pop();
@@ -311,40 +329,24 @@ public:
             }
         }
 
-        for (auto pp: d)ret.emplace_back(pp.first,pp.second);
-        return ret;
+        return std::move(d);
     }
 
     // Julio
-    // Retorno un vector de pares {etiqueta de un nodo, {tiempo de entrada, tiempo de salida}}
-    vector <pair <N, pair <int, int>>> dfs (N source) {
+    map <N, pair <int, int>> DFS (N source) {
         if (!findNode(source)) throw "The node does not belong to the graph";
-        vector <pair <N,pair <int, int>>> ret;
+        map <N, pair <int, int>> ret;
         map <N, int> time_in;
         map <N, int> time_out;
         map <N, int> color;
-        dfsRec(source, time_in, time_out, color, 0);
+        int timer = 0;
+        dfsRec(source, time_in, time_out, color, timer);
         for (auto pp: time_in) {
-            ret.push_back({pp.first, {time_in[pp.first], time_out[pp.second]}});
+            ret[pp.first] = {time_in[pp.first], time_out[pp.first]};
         }
         return ret;
     }
                           
-    void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
-        time_in[source] = dfs_timer++;
-        color[source] = 1;
-        for (N u : adjList[source])
-            if (color[u] == 0)
-                dfsRec(u,time_in,time_out,color,dfs_timer);
-        color[source] = 2;
-        time_out[source] = dfs_timer++;
-    }
-
-
-    // Retorna si el grafo es conexo
-    bool isConex () {
-        return true;
-    }
 
     // Leonidas
     pair <bool, map <N, bool>> getBipartiteAndColors () {
@@ -353,22 +355,29 @@ public:
       map <N, bool> color;
       for (node current: this -> nodeList) {
         N cur_tag = current.getTag();
-        if (color.count(cur_tag)) continue;
         queue <N> Q;
         Q.push(cur_tag);
-        color[cur_tag] = BLACK;
+        if (color.count(cur_tag) == 0) {
+          color[cur_tag] = BLACK;
+        }
         while (not Q.empty()) {
           N u = Q.front();
           Q.pop();
           for (N v: adjList[u]) {
             if (color.count(v) == 0) {
               color[v] = (color[u] == BLACK) ? WHITE : BLACK;
-            } else if (color[u] == color[v]) return {false, map <N, bool> ()};
+              Q.push(v);
+            } else if (color[u] == color[v]) {
+              return {false, map <N, bool> ()};
+            }
           }
           for (N v: adjList_Trans[u]) {
             if (color.count(v) == 0) {
               color[v] = (color[u] == BLACK) ? WHITE : BLACK;
-            } else if (color[u] == color[v]) return {false, map <N, bool> ()};
+              Q.push(v);
+            } else if (color[u] == color[v]) {
+              return {false, map <N, bool> ()};
+            }
           }
         }
       }
@@ -376,11 +385,38 @@ public:
     }
 
     // Leonidas
-    std::pair <bool, map <N, int>> getStronglyConnectedComponents () {
-      // TO DO
-      return true;
+    std::pair <int, map <N, int>> getStronglyConnectedComponents () {
+      queue <N> topo;
+      set <N> vis;
+      std::function <void (N)> dfs1 = [&] (int u) -> void {
+        vis.insert(u);
+        for (N v: adjList[u]) {
+          if (vis.count(v)) continue;
+          dfs1(v);
+        }
+        topo.push(u);
+      };
+      for (node u: nodeList) if (vis.count(u.getTag()) == 0) dfs1(u.getTag());
+      set <N> visSCC;
+      map <N, int> component;
+      int nComponents = 0;
+      std::function <void (N)> dfs2 = [&] (int u) -> void {
+        visSCC.insert(u);
+        component[u] = nComponents;
+        for (N v: adjList_Trans[u]) if (visSCC.count(v) == 0) dfs2(v);
+      };
+      while (not topo.empty()) {
+        N u = topo.front();
+        topo.pop();
+        if (visSCC.count(u)) continue;
+        nComponents++;
+        dfs2(u);
+      }
+      return {nComponents, component};
     }
 
+    bool isConex () { return getStronglyConnectedComponents().first == 1; }
+    void setDensityParameter (double density) const { denseParameter = density; }
     int getNumberOfNodes () const { return nodeList.size(); }
     int getNumberOfEdges () const { return edgeList.size(); }
     set <node> getNodeList () const { return nodeList; }
@@ -388,6 +424,8 @@ public:
 
     void ImprimirGrafo(){
 
+      cout << "Is directed" << endl;
+      cout << is_directed << endl;
       cout << "Imprimiendo nodos" << endl;
       for(auto i:nodeList){
         cout << i.getTag() << " ";
@@ -407,6 +445,16 @@ public:
         }
         cout << endl;
       }
+
+      cout << "Imprimiendo la lista de adyacencia transpuesta" << endl;
+      for (auto it = adjList_Trans.begin();it != adjList_Trans.end();it++){
+        cout << it->first<< " ";
+        for (auto i: it->second){
+          cout << i <<" ";
+        }
+        cout << endl;
+      }
+
     }
 
 private:
@@ -417,6 +465,20 @@ private:
     map <N, set <N>> adjList;
     map <N, set <N>> adjList_Trans;
     bool is_directed;
+
+    
+     void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
+        time_in[source] = dfs_timer++;
+        color[source] = 1;
+        for (N u : adjList[source])
+            if (color[u] == 0)
+                dfsRec(u,time_in,time_out,color,dfs_timer);
+        color[source] = 2;
+        time_out[source] = dfs_timer++;
+    }
+   
+    
+
 };
 
 #endif

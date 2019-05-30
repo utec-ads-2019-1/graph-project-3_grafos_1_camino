@@ -1,8 +1,6 @@
 #include "../include/UI.hpp"
 #include "../include/config.hpp"
 
-#include <iostream>
-
 UI::UI () {
   window = new sf::RenderWindow();
   window -> create(sf::VideoMode(WIDTH, HEIGHT), WINDOW_NAME);

@@ -67,7 +67,6 @@ class View {
     virtual void execute (sf::Font*& font) = 0;
     virtual void draw (sf::RenderWindow*& window) = 0;
   protected:
-    bool toExecute = false;
     int indexVertexSelected = -1;
     Graph <N, E>* graph;
     std::vector <string> tags;

@@ -58,6 +58,7 @@ const float SEGMENT_LENGTH = GRID_INTERVAL / 10;
 const float FILE_PADDING = GRID_INTERVAL / 15;
 const sf::Color FILE_COLOR = sf::Color::Red;
 const sf::Color FILE_HOVER_COLOR = sf::Color::Blue;
+const std::string PATH_INPUT = "./ui/input/";
 
 // CONSOLE
 const float CONSOLE_POS_X = GRID_POS_X;
@@ -70,7 +71,6 @@ const sf::Color CONSOLE_COLOR = sf::Color::Green;
 // GRAPH UI
 const float VERTEX_RADIUS = 15.f;
 const sf::Color VERTEX_COLOR = sf::Color::White;
-const sf::Color VERTEX_HOVER_COLOR = sf::Color::Green;
 const sf::Color VERTEX_TEXT_COLOR = sf::Color::Red;
 static std::vector <sf::Color> GRAPH_COLORS = {
   sf::Color::Blue,
@@ -80,6 +80,9 @@ static std::vector <sf::Color> GRAPH_COLORS = {
 };
 const sf::Color EDGE_COLOR = sf::Color::Red;
 const float EDGE_THICK = 5.f;
+const float VERTEX_THICK = 0;
+const float VERTEX_HOVER_THICK = 3;
+const sf::Color VERTEX_THICK_COLOR = sf::Color::Red;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {
@@ -107,22 +110,13 @@ static sf::Vertex* buildLine (sf::Vector2f from, sf::Vector2f to, sf::Color back
   sf::Vector2f unitDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
   sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
   sf::Vector2f offset = (thickness / 2.f) * unitPerpendicular;
-
   sf::Vertex* vertices = new sf::Vertex[4];
   vertices[0].position = from + offset;
   vertices[1].position = to + offset;
   vertices[2].position = to - offset;
   vertices[3].position = from - offset;
-  for (int i=0; i < 4; ++i) vertices[i].color = background;
+  for (int i = 0; i < 4; ++i) vertices[i].color = background;
   return vertices;
-
-  /*  sf::VertexArray* line = new sf::VertexArray(sf::LinesStrip, 2);
-      (*line)[0].position = from;
-      (*line)[0].color = background;
-      (*line)[1].position = to;
-      (*line)[1].color = background;
-      return line;
-      */
 }
 
 static sf::CircleShape* buildCircle (float radius, sf::Vector2f position, sf::Color background) {
@@ -147,12 +141,13 @@ static sf::Text* buildText (sf::Vector2f dimentions, sf::Vector2f position, std:
 }
 
 template <typename N, typename E>
-static void loadFromFile (std::string fileName, Graph <N, E>*& graph, bool is_directed) {
-  graph = new Graph <N, E> (is_directed);
+static void loadFromFile (std::string fileName, Graph <N, E>*& graph) {
   ifstream file;
   file.open(fileName);
   int n, e;
-  file >> n >> e;
+  bool is_directed;
+  file >> n >> e >> is_directed;
+  graph = new Graph <N, E> (is_directed);
   for (int i = 0; i < n; i++) {
     N tag;
     float x, y;
