@@ -83,6 +83,7 @@ const float EDGE_THICK = 5.f;
 const float VERTEX_THICK = 0;
 const float VERTEX_HOVER_THICK = 3;
 const sf::Color VERTEX_THICK_COLOR = sf::Color::Red;
+const sf::Color EDGE_MST = sf::Color::Yellow;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {
@@ -101,7 +102,7 @@ static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f
 
 static sf::Vector2f getWindowCoordinates (float x, float y) {
   float windowX = ORIGIN_X + (x * GRID_INTERVAL) / 10.f;
-  float windowY = ORIGIN_Y + (y * GRID_INTERVAL) / 10.f;
+  float windowY = ORIGIN_Y - (y * GRID_INTERVAL) / 10.f;
   return sf::Vector2f(windowX, windowY);
 }
 

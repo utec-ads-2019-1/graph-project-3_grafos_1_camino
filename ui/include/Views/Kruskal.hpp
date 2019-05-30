@@ -1,13 +1,24 @@
 #ifndef KRUSKAL_HPP
 #define KRUSKAL_HPP
 
+#include <set>
 #include "View.hpp"
 
 template <typename N, typename E>
 class Kruskal: public View <N, E> {
   public:
     Kruskal (Graph <N, E>*& graph, std::string label, sf::Font*& font):
-      View <N, E> (graph, label, font) {}
+      View <N, E> (graph, label, font) {
+      Graph <N, E> mst = this -> graph -> Kruskal();
+      for (int i = 0; i < int(this -> edgesUI.size()); i++) {
+        Edge <N, E> e = this -> edges[i];
+        Node <N>* from = mst.findNode(e.getNodes().first);
+        Node <N>* to = mst.findNode(e.getNodes().second);
+        sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));
+        sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
+        this -> edgesUI[i] = buildLine(fromPoint, toPoint, EDGE_MST, EDGE_THICK);
+      }
+    }
     ~Kruskal () {
       delete this -> console;
     }
