@@ -91,59 +91,39 @@ class Graph {
 
     // Daniel
     bool deleteEdge (N from, N to) {
-      if(!findEdge(from,to))
-        return false;
-      else{
-        if(is_directed){
-          auto it = adjList.find(from);
-          if (it != adjList.end()){
-            auto it2 = (it->second).find(to);
-            (it->second).erase(it2);
-          }
-          it = adjList_Trans.find(to);
-          if (it != adjList_Trans.end()){
-            auto it3 = (it->second).find(from);
-            (it->second).erase(it3);
-          }
-
-          for (auto itr = edgeList.begin(); itr != edgeList.end(); itr++)
-          {
-            edge ed = *itr;
-            if(ed.getNodes().first==from and ed.getNodes().second==to){
-              edgeList.erase(itr);
-              break;
+      if(!findEdge(from,to)){
+            return false;}
+        else{
+            if(is_directed){
+                auto it = adjList.find(from);
+                if (it != adjList.end()){
+                    auto it2 = (it->second).find(to);
+                    (it->second).erase(it2);
+                }
+                it = adjList_Trans.find(to);
+                if (it != adjList_Trans.end()){
+                    auto it3 = (it->second).find(from);
+                    (it->second).erase(it3);
+                }
+                edge* del = findEdge(from,to);
+                auto itr = edgeList.find(*del);
+                edgeList.erase(itr);
+            } else{
+                auto it = adjList.find(from);
+                if (it != adjList.end()){
+                    auto it2 = it->second.find(to);
+                    it->second.erase(it2);
+                }
+                it = adjList.find(to);
+                if (it != adjList.end()){
+                    auto it3 = (it->second).find(from);
+                    (it->second).erase(it3);
+                }
+                edgeList.erase(edgeList.find(*findEdge(from,to)));
+                edgeList.erase(edgeList.find(*findEdge(to,from)));
             }
-          }
-
-        } else{
-          auto it = adjList.find(from);
-          if (it != adjList.end()){
-            auto it2 = it->second.find(to);
-            it->second.erase(it2);
-          }
-          it = adjList.find(to);
-          if (it != adjList.end()){
-            auto it3 = (it->second).find(from);
-            (it->second).erase(it3);
-          }
-
-          auto itr = edgeList.begin();
-
-          while (itr != edgeList.end()){
-            edge ed = *itr;
-
-            if(ed.getNodes().first==from and ed.getNodes().second==to){
-              edgeList.erase(itr);
-            }
-            if(ed.getNodes().first==to and ed.getNodes().second==from){
-              edgeList.erase(itr);
-            }
-
-            itr++;
-          }
+            return true;
         }
-        return true;
-      }
 
     }
 
@@ -163,9 +143,9 @@ class Graph {
 
     // Daniel
     edge* findEdge (N from, N to) {
-      for (auto i : edgeList){
-        if(i.getNodes().first==from and i.getNodes().second==to){
-          edge* ret = &i;
+      for (auto ed : edgeList){
+        if(ed.getNodes().first==from and ed.getNodes().second==to){
+          edge* ret = &ed;
           return ret;
         }
       }
@@ -215,10 +195,8 @@ class Graph {
 
       self mst(is_directed);
 
-
       node* current = findNode(tag);
       set <N> currentNodes;
-
       mst.addNode(current->getTag(),current->getX(),current->getY());
       currentNodes.insert(tag);
 
@@ -243,8 +221,6 @@ class Graph {
             }
 
           }
-
-
         }
         if(availableEdges.empty()){
           current = nullptr;
@@ -258,12 +234,10 @@ class Graph {
           mst.addNode(current->getTag(),current->getX(),current->getY());
           mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
           currentNodes.insert(current->getTag());
-
         }
         availableEdges.clear();
         i++;
       }
-
       return move(mst);
     }
 
