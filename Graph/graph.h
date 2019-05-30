@@ -312,9 +312,8 @@ public:
           int flag0 = 0, flag1 = 0;
           if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
           if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
-          cout << itSet->getNodes().first  << itSet->getNodes().second << " \n";
           if ((flag0 + flag1) > 1){
-              vector <pair <N,int> > bfsP =  mst.BFS(pairNodes.first);
+              map <N, int> bfsP =  mst.BFS(pairNodes.first);
               bool is = false;
               for (auto it: bfsP){
                   if (it.first == pairNodes.second){

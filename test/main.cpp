@@ -10,6 +10,12 @@ void testAddNode () {
   if (!graph -> addNode('a', 0.0, 0.0)) cerr << "Error inserting node 'a'" << endl;
   if (!graph -> addNode('b', 1.0, 0.0)) cerr << "Error inserting node 'a'" << endl;
   if (!graph -> addNode('c', 0.0, 1.0)) cerr << "Error inserting node 'a'" << endl;
+  if (!graph -> addNode('d', 2.0, 0.0)) cerr << "Error inserting node 'a'" << endl;
+  if (!graph -> addNode('e', 0.0, 2.0)) cerr << "Error inserting node 'a'" << endl;
+  if (!graph -> addNode('f', 3.0, 1.0)) cerr << "Error inserting node 'a'" << endl;
+  if (!graph -> addNode('g', 0.0, 3.0)) cerr << "Error inserting node 'a'" << endl;
+  if (!graph -> addNode('h', 0.0, 9.0)) cerr << "Error inserting node 'a'" << endl;  
+  
 }
 
 void testFindNode() {
@@ -19,14 +25,18 @@ void testFindNode() {
 }
 
 void testAddEdge () {
-  if (!graph -> addEdge('a', 'b', 10.0)) cerr << "Error inserting edge (a, b, 10)" << endl;
-  if (!graph -> addEdge('a', 'c', 11.0)) cerr << "Error inserting edge (a, b, 10)" << endl;
-  if (!graph -> addEdge('c', 'b', 12.0)) cerr << "Error inserting edge (a, b, 10)" << endl;
+  if (!graph -> addEdge('a', 'b', 2.0)) cerr << "Error inserting edge (a, b, 2)" << endl;
+  if (!graph -> addEdge('b', 'c', 1.0)) cerr << "Error inserting edge (b, c, 1)" << endl;
+  if (!graph -> addEdge('b', 'd', 3.0)) cerr << "Error inserting edge (b, d, 3)" << endl;
+  if (!graph -> addEdge('b', 'e', 7.0)) cerr << "Error inserting edge (b, e, 7)" << endl;
+  if (!graph -> addEdge('d', 'e', 5.0)) cerr << "Error inserting edge (d, e, 5)" << endl;
+  if (!graph -> addEdge('e', 'f', 8.0)) cerr << "Error inserting edge (e, f, 8)" << endl;
+  if (!graph -> addEdge('f', 'g', 1.0)) cerr << "Error inserting edge (f, g, 1)" << endl;
 }
 
 void testFindEdge () {
   if (!graph -> findEdge('a', 'b')) cerr << "Error finding edge (a, b, 10)" << endl;
-  if (!graph -> findEdge('a', 'c')) cerr << "Error finding edge (a, b, 10)" << endl;
+  if (!graph -> findEdge('b', 'd')) cerr << "Error finding edge (a, b, 10)" << endl;
   if (!graph -> findEdge('c', 'b')) cerr << "Error finding edge (a, b, 10)" << endl;
 }
 
@@ -47,15 +57,24 @@ void testPrim () {
     if (!mst.findNode('a')) cerr << "Prim is not working" << endl;
     if (!mst.findNode('b')) cerr << "Prim is not working" << endl;
     if (!mst.findNode('c')) cerr << "Prim is not working" << endl;
+  /*  if (!mst.findNode('d')) cerr << "Prim is not working" << endl;
+    if (!mst.findNode('e')) cerr << "Prim is not working" << endl;
+    if (!mst.findNode('f')) cerr << "Prim is not working" << endl;
+    if (!mst.findNode('g')) cerr << "Prim is not working" << endl;
+    if (!mst.findNode('h')) cerr << "Prim is not working" << endl;*/
   }
 }
 
 void testKruskal () {
   Graph <char, float> mst = graph -> Kruskal();
-  if (!mst.findNode('a')) cerr << "Prim is not working" << endl;
-  if (!mst.findNode('b')) cerr << "Prim is not working" << endl;
-  if (!mst.findNode('c')) cerr << "Prim is not working" << endl;
-
+  if (!mst.findNode('a')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('b')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('c')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('d')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('e')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('f')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('g')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('h')) cerr << "Kruskal is not working" << endl;
 }
 
 void testBFS () {
@@ -105,7 +124,7 @@ int main (int argc, char *argv[]) {
     testFindEdge();
     testProperties();
     // testPrim(); Not working
-    // testKruskal(); Not implemented
+    testKruskal(); //Not implemented
     testDFS();
     testBFS();
     testConex();
