@@ -11,5 +11,5 @@ window: FORCE
 FORCE: ;
 
 clean:
-	rm run
+	rm run window
 

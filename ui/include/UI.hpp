@@ -18,7 +18,7 @@ class UI {
     Menu* menu;
     GraphUI* graphUI;
     sf::Event event;
-    int currentView = -1;
+    int currentView = 0;
 
     void update ();
     void draw ();
