@@ -198,15 +198,6 @@ class Graph {
     }
 
     //Elvis
-<<<<<<< HEAD
-    int getDegree (N tag) { 
-
-      return getOutDegree(tag); 
-    }
-    
-    //Elvis
-=======
->>>>>>> master
     int getOutDegree (N tag){
       if (!findNode(tag)) throw "The node doesn't belong to the graph";
       auto node = adjList.find(tag);
@@ -222,11 +213,6 @@ class Graph {
     }
 
     // Daniel
-<<<<<<< HEAD
-    self Prim () {
-      if (is_directed) throw "The graph must be undirected";    
-      self mst(is_directed);          
-=======
     self Prim (N tag) {
       if (is_directed) throw "The graph must be undirected";
 
@@ -281,7 +267,6 @@ class Graph {
         i++;
       }
 
->>>>>>> master
       return move(mst);
     }
     // Elvis
