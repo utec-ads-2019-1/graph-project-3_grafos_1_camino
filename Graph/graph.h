@@ -154,9 +154,9 @@ public:
     // Daniel
     edge* findEdge (N from, N to) {
         // Similar a findVertex
-        for (auto i : edgeList){
-            if(i.getNodes().first==from and i.getNodes().second==to){
-                edge* ret = &i;
+        for (auto ed : edgeList){
+            if(ed.getNodes().first==from and ed.getNodes().second==to){
+                edge* ret = &ed;
                 return ret;
             }
         }
@@ -269,7 +269,43 @@ public:
     // Elvis
     self Kruskal () {
         if (is_directed) throw "The graph must be undirected";
+        cout << "aplicando el algoritmo de kruskal" << endl;
         self mst(is_directed);
+        set <N> nodes;
+        auto itSet = edgeList.begin();
+        int count = nodeList.size();
+        pair <N, N> pairNodes;
+
+        while (count > 0){
+            /*cout << "imprimiendo nodos:" << endl;
+            for (auto it = nodes.begin(); it != nodes.end(); ++it) {
+                cout << (*it) << endl;
+            }*/
+            pairNodes = itSet->getNodes();
+            int flag0 = 0, flag1 = 0;
+            if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
+            if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
+
+            if ((flag0 + flag1) > 1){
+                itSet++;
+                continue;
+            }
+            node* node;
+            if(flag0 == 1){
+                node = findNode(pairNodes.first);
+                nodes.insert(pairNodes.first);
+                mst.addNode(pairNodes.first, node -> getX(), node -> getY());
+                count--;
+            }
+            if(flag1 == 1){
+                node = findNode(pairNodes.first);
+                nodes.insert(pairNodes.second);
+                mst.addNode(pairNodes.second, node -> getX(), node -> getY());
+                count--;
+            }
+            mst.addEdge(pairNodes.first, pairNodes.second, itSet->getWeight());
+            itSet++;
+        }
         return move(mst);
     }
 
@@ -357,8 +393,6 @@ public:
                 cout << endl;
             }
         }
-
-
     }
 
 private:
