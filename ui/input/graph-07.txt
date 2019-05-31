@@ -16,7 +16,7 @@ B E 30
 B H 17
 C F 3 
 C D 21 
-C G 1
+C G 11
 D F 9 
 D E 51
 D G 6 
