@@ -15,6 +15,9 @@ const float PROGRAM_PADDING = 20.f;
 // FONT
 const std::string FONT_PATH = "./ui/fonts/arial.ttf";
 
+// SOUND
+const std::string SOUND_PATH = "./ui/sound/music.wav";
+
 // MENU
 const std::vector <std::string> MENU_OPTIONS = {
   "Load File",
