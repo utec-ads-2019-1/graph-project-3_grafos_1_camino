@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <typeinfo>
@@ -55,7 +56,7 @@ public:
       }
       adjList.erase(tag);
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
-        if (i -> getTag() == tag) nodeList.erase(tag);
+        if (i -> getTag() == tag) nodeList.erase(i);
       }
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
@@ -120,7 +121,7 @@ public:
     node* findNode (N tag) {
       for ( auto it_set : nodeList){
         if (it_set.getTag() == tag){
-          node* ret = &it_set;
+          node* ret = new node(it_set.getTag(), it_set.getX(), it_set.getY());
           return ret;
         }
       }
@@ -131,7 +132,7 @@ public:
     edge* findEdge (N from, N to) {
       for (auto ed : edgeList){
         if(ed.getNodes().first==from and ed.getNodes().second==to){
-          edge* ret = &ed;
+          edge* ret = new edge(ed.getNodes().first, ed.getNodes().second, ed.getWeight());
           return ret;
         }
       }
@@ -381,7 +382,7 @@ public:
 
     // Leonidas
     std::pair <int, map <N, int>> getStronglyConnectedComponents () {
-      queue <N> topo;
+      std::vector <N> topo;
       set <N> vis;
       std::function <void (N)> dfs1 = [&] (int u) -> void {
         vis.insert(u);
@@ -389,7 +390,7 @@ public:
           if (vis.count(v)) continue;
           dfs1(v);
         }
-        topo.push(u);
+        topo.push_back(u);
       };
       for (node u: nodeList) if (vis.count(u.getTag()) == 0) dfs1(u.getTag());
       set <N> visSCC;
@@ -401,8 +402,8 @@ public:
         for (N v: adjList_Trans[u]) if (visSCC.count(v) == 0) dfs2(v);
       };
       while (not topo.empty()) {
-        N u = topo.front();
-        topo.pop();
+        N u = topo.back();
+        topo.pop_back();
         if (visSCC.count(u)) continue;
         nComponents++;
         dfs2(u);
@@ -410,6 +411,7 @@ public:
       return {nComponents, component};
     }
 
+    bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
     void setDensityParameter (double density) const { denseParameter = density; }
     int getNumberOfNodes () const { return nodeList.size(); }
