@@ -21,7 +21,6 @@ class Edge {
     }
 
 
-
   private:
     E weight;
     N from;
