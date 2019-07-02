@@ -68,14 +68,14 @@ void testPrim () {
 void testKruskal () {
   Graph <char, float> mst = graph -> Kruskal();
   set <Node <char>> nodes = mst.getNodeList();
-  if (!mst.findNode('a')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('b')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('c')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('d')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('e')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('f')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('g')) cerr << "Kruskal is not working" << endl;
-  if (!mst.findNode('h')) cerr << "Kruskal is not working" << endl;
+  if (!mst.findNode('a')) cerr << "Kruskal is not working 'a'" << endl;
+  if (!mst.findNode('b')) cerr << "Kruskal is not working 'b'" << endl;
+  if (!mst.findNode('c')) cerr << "Kruskal is not working 'c'" << endl;
+  if (!mst.findNode('d')) cerr << "Kruskal is not working 'd'" << endl;
+  if (!mst.findNode('e')) cerr << "Kruskal is not working 'e'" << endl;
+  if (!mst.findNode('f')) cerr << "Kruskal is not working 'f'" << endl;
+  if (!mst.findNode('g')) cerr << "Kruskal is not working 'g'" << endl;
+  if (!mst.findNode('h')) cerr << "Kruskal is not working 'h'" << endl;
 }
 
 void testBFS () {
@@ -119,18 +119,18 @@ void testSCC () {
   pair <int, map <char, int>> ret = graph -> getStronglyConnectedComponents ();
   if (ret.first != 2) cerr << "SCC is not giving the correct number of SCC" << endl;
   map <char, int> components = ret.second;
-  if (components['a'] != 1) cerr << "SCC is not working" << endl;
-  if (components['b'] != 1) cerr << "SCC is not working" << endl;
-  if (components['c'] != 1) cerr << "SCC is not working" << endl;
-  if (components['d'] != 1) cerr << "SCC is not working" << endl;
-  if (components['e'] != 1) cerr << "SCC is not working" << endl;
-  if (components['f'] != 1) cerr << "SCC is not working" << endl;
-  if (components['g'] != 1) cerr << "SCC is not working" << endl;
-  if (components['h'] != 2) cerr << "SCC is not working" << endl;
+  if (components['a'] != 2) cerr << "SCC is not working" << endl;
+  if (components['b'] != 2) cerr << "SCC is not working" << endl;
+  if (components['c'] != 2) cerr << "SCC is not working" << endl;
+  if (components['d'] != 2) cerr << "SCC is not working" << endl;
+  if (components['e'] != 2) cerr << "SCC is not working" << endl;
+  if (components['f'] != 2) cerr << "SCC is not working" << endl;
+  if (components['g'] != 2) cerr << "SCC is not working" << endl;
+  if (components['h'] != 1) cerr << "SCC is not working" << endl;
 }
 
 void testDeleteNodeAndEdge () {
-  // TO DO
+  graph -> deleteNode('a');
 }
 
 int main (int argc, char *argv[]) {
@@ -141,8 +141,8 @@ int main (int argc, char *argv[]) {
     testAddEdge();
     testFindEdge();
     testProperties();
-    // testPrim(); // Not working
-    testKruskal();
+    //testPrim();
+    //testKruskal();
     testDFS();
     testBFS();
     testConex();

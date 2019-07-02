@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -w -O2
+CXXFLAGS = -std=c++11
 UIFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 run: FORCE

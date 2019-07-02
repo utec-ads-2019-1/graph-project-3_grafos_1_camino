@@ -9,9 +9,11 @@ class Kruskal: public View <N, E> {
   public:
     Kruskal (Graph <N, E>*& graph, std::string label, sf::Font*& font):
       View <N, E> (graph, label, font) {
+      if (this -> graph -> isDirected()) return;
       Graph <N, E> mst = this -> graph -> Kruskal();
       for (int i = 0; i < int(this -> edgesUI.size()); i++) {
         Edge <N, E> e = this -> edges[i];
+        if (!mst.findEdge(e.getNodes().first, e.getNodes().second)) continue;
         Node <N>* from = mst.findNode(e.getNodes().first);
         Node <N>* to = mst.findNode(e.getNodes().second);
         sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));

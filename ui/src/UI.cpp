@@ -8,12 +8,18 @@ UI::UI () {
   if (not font -> loadFromFile(FONT_PATH)) {
     throw std::runtime_error("Could not load font from " + FONT_PATH + "\n");
   }
+  backgroundMusic = new sf::Music(); 
+  if (not backgroundMusic -> openFromFile(SOUND_PATH)) {
+    throw std::runtime_error("Could not load " + SOUND_PATH + "\n");
+}
   menu = new Menu(font);
   graphUI = new GraphUI(font);
+  backgroundMusic -> play();
 }
 
 UI::~UI () {
   delete font;
+  delete backgroundMusic;
   delete window;
   delete menu;
   delete graphUI;

@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <typeinfo>
@@ -16,7 +17,7 @@ using namespace std;
 
 template <typename N, typename E>
 class Graph {
-public:
+  public:
     typedef Graph <N, E> self;
     typedef Node <N> node;
     typedef Edge <N, E> edge;
@@ -55,12 +56,12 @@ public:
       }
       adjList.erase(tag);
       for (auto i = nodeList.begin(); i != nodeList.end(); i++){
-        if (i -> getTag() == tag) nodeList.erase(tag);
+        if (i -> getTag() == tag) nodeList.erase(i);
       }
       node = adjList_Trans.find(tag);
       for (auto i : node -> second){
         itMap = adjList.find(i);
-        itMap->second.erase(tag); 
+        itMap->second.erase(tag);
       }
       adjList_Trans.erase(tag);
       return true;
@@ -87,51 +88,51 @@ public:
 
     // Daniel
     bool deleteEdge (N from, N to) {
-            if(!findEdge(from,to))
-            return false;
+      if(!findEdge(from,to))
+        return false;
       if(is_directed) {
-          adjList[from].erase(to);
-          adjList_Trans[to].erase(from);
-          edge* del = findEdge(from,to);
-          auto itr = edgeList.find(*del);
-          edgeList.erase(itr);
+        adjList[from].erase(to);
+        adjList_Trans[to].erase(from);
+        edge* del = findEdge(from,to);
+        auto itr = edgeList.find(*del);
+        edgeList.erase(itr);
       } else{
-          adjList[from].erase(to);
-          adjList[to].erase(from);
-          adjList_Trans[from].erase(to);
-          adjList_Trans[to].erase(from);
+        adjList[from].erase(to);
+        adjList[to].erase(from);
+        adjList_Trans[from].erase(to);
+        adjList_Trans[to].erase(from);
 
-          auto itr = edgeList.begin();
-          while (itr != edgeList.end()){
-              edge ed = *itr;
-              if(ed.getNodes().first==from and ed.getNodes().second==to){
-                  edgeList.erase(itr);
-              }
-              if(ed.getNodes().first==to and ed.getNodes().second==from){
-                  edgeList.erase(itr);
-              }
-              itr++;     
+        auto itr = edgeList.begin();
+        while (itr != edgeList.end()){
+          edge ed = *itr;
+          if(ed.getNodes().first==from and ed.getNodes().second==to){
+            edgeList.erase(itr);
           }
-      }  
+          if(ed.getNodes().first==to and ed.getNodes().second==from){
+            edgeList.erase(itr);
+          }
+          itr++;
+        }
+      }
       return true;
-   }
+    }
 
     // Elvis
     node* findNode (N tag) {
       for ( auto it_set : nodeList){
         if (it_set.getTag() == tag){
-          node* ret = &it_set;
+          node* ret = new node(it_set.getTag(), it_set.getX(), it_set.getY());
           return ret;
         }
       }
-      return nullptr;  
-     }  
+      return nullptr;
+    }
 
     // Daniel
     edge* findEdge (N from, N to) {
       for (auto ed : edgeList){
         if(ed.getNodes().first==from and ed.getNodes().second==to){
-          edge* ret = &ed;
+          edge* ret = new edge(ed.getNodes().first, ed.getNodes().second, ed.getWeight());
           return ret;
         }
       }
@@ -141,47 +142,47 @@ public:
 
     // Julio
     double getDensity () {
-        if (getNumberOfNodes() <= 1) throw "Division by zero";
-        double density = 0.0;
-        if (is_directed== true){
-            density=(getNumberOfEdges()/(getNumberOfNodes()*(getNumberOfNodes()-1)));
-        } else{
-            density=(2*getNumberOfEdges()/(getNumberOfNodes()*(getNumberOfNodes()-1)));
-        }
-        return density;
+      if (getNumberOfNodes() <= 1) throw "Division by zero";
+      double density = 0.0;
+      if (is_directed== true){
+        density=(getNumberOfEdges()/(getNumberOfNodes()*(getNumberOfNodes()-1)));
+      } else{
+        density=(2*getNumberOfEdges()/(getNumberOfNodes()*(getNumberOfNodes()-1)));
+      }
+      return density;
     }
 
     // Julio
     bool isSource (N tag) {
-        if (!findNode(tag)) throw "The node does not belong to the graph";
-        // retorna si `tag` es un nodo fuente
-        //for (auto i : edgeList){
-            //if(i.getNodes().second==tag){
-                //return false;
-                //}
-            //}
-        if (this->getInDegree(tag)==0){
-            return true;
-        }
+      if (!findNode(tag)) throw "The node does not belong to the graph";
+      // retorna si `tag` es un nodo fuente
+      //for (auto i : edgeList){
+      //if(i.getNodes().second==tag){
+      //return false;
+      //}
+      //}
+      if (this->getInDegree(tag)==0){
+        return true;
+      }
 
-        return false;
+      return false;
 
     }
 
     // Julio
     bool isSink (N tag) {
-        if (!findNode(tag)) throw "The node does not belong to the graph";
-        // retorna si `tag` es un nodo hundido
-        //for (auto i : edgeList){
-            //if(i.getNodes().first==tag){
-                //return false;
-            //}
-        //
-        if (this->getOutDegree(tag)==0){
-            return true;
-        }
+      if (!findNode(tag)) throw "The node does not belong to the graph";
+      // retorna si `tag` es un nodo hundido
+      //for (auto i : edgeList){
+      //if(i.getNodes().first==tag){
+      //return false;
+      //}
+      //
+      if (this->getOutDegree(tag)==0){
+        return true;
+      }
 
-        return false;
+      return false;
     }
 
     //Elvis
@@ -212,36 +213,54 @@ public:
 
       int i = 1;
       while (current){
+
+        //    cout << "nodos actuales : " ;
+        //for (auto i: currentNodes)
+        //cout << i << " ";
+        //cout << endl;
         vector<edge> availableEdges;
         for (auto A : currentNodes){
           for (auto it = adjList.begin();it != adjList.end();it++){
             if(A == it->first){
               for (auto B: it->second){
+                //          cout << A << B<< " ";
                 auto it2 = currentNodes.find(B);
                 if(it2!=currentNodes.end()){
                 } else{
-                  if(findEdge(A,B)){
-                    edge* ed  = findEdge(A,B);
-                    edge e = *ed;
-                    availableEdges.push_back(e);
-                  }
+                  edge* ed  = findEdge(A,B);
+                  availableEdges.push_back(*ed);
+
                 }
               }
+              //  cout <<endl;
             }
-
           }
         }
         if(availableEdges.empty()){
           current = nullptr;
         } else{
-          edge* e = &availableEdges[0];
-          for(auto ed: availableEdges){
-            if(e->getWeight()>ed.getWeight())
-              e = &ed;
+          E minW = availableEdges[0].getWeight();
+          //cout << "arista disponibles" <<endl;
+          for(edge ed: availableEdges){
+            // cout << ed.getNodes().first <<ed.getNodes().second << " " << ed.getWeight() << "   ";
+            if(minW >ed.getWeight())
+              minW = ed.getWeight();
           }
+          edge* e;
+          for(edge ed: availableEdges){
+            if(minW == ed.getWeight()){
+              e = &ed;
+              break;
+            }
+
+          }
+
+
+          //cout << endl;
           current = findNode(e->getNodes().second);
           mst.addNode(current->getTag(),current->getX(),current->getY());
           mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
+
           currentNodes.insert(current->getTag());
         }
         availableEdges.clear();
@@ -249,6 +268,7 @@ public:
       }
       return move(mst);
     }
+
     // Elvis
     self Kruskal () {
       if (is_directed) throw "The graph must be undirected";
@@ -258,90 +278,90 @@ public:
       pair <N, N> pairNodes;
       bool ready = false;
       while (itSet!= edgeList.end() ){
-          pairNodes = itSet -> getNodes();
-          int flag0 = 0, flag1 = 0;
-          if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
-          if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
-          if ((flag0 + flag1) > 1){
-              map <N, int> bfsP =  mst.BFS(pairNodes.first);
-              bool is = false;
-              for (auto it: bfsP){
-                  if (it.first == pairNodes.second){
-                      is = true;
-                      break;
-                  }
-              }
-              if (!is){
-                  mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
-              }
-              itSet++;
-              itSet++;
-              if (itSet == edgeList.end()) break;
-              continue;
+        pairNodes = itSet -> getNodes();
+        int flag0 = 0, flag1 = 0;
+        if (nodes.find(pairNodes.first) != nodes.end()) flag0++;
+        if (nodes.find(pairNodes.second) != nodes.end()) flag1++;
+        if ((flag0 + flag1) > 1){
+          map <N, int> bfsP =  mst.BFS(pairNodes.first);
+          bool is = false;
+          for (auto it: bfsP){
+            if (it.first == pairNodes.second){
+              is = true;
+              break;
+            }
           }
-          if(flag0 == 0){
-              node* node = findNode(pairNodes.first);
-              nodes.insert(node -> getTag());
-              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+          if (!is){
+            mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
           }
-          if (flag1 == 0){
-              node* node = findNode(pairNodes.second);
-              nodes.insert(node -> getTag());
-              mst.addNode(node -> getTag(), node -> getX(), node -> getY());
-          }
-          mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
           itSet++;
           itSet++;
+          if (itSet == edgeList.end()) break;
+          continue;
+        }
+        if(flag0 == 0){
+          node* node = findNode(pairNodes.first);
+          nodes.insert(node -> getTag());
+          mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+        }
+        if (flag1 == 0){
+          node* node = findNode(pairNodes.second);
+          nodes.insert(node -> getTag());
+          mst.addNode(node -> getTag(), node -> getX(), node -> getY());
+        }
+        mst.addEdge(pairNodes.first, pairNodes.second, itSet -> getWeight());
+        itSet++;
+        itSet++;
       }
       for (node i:nodeList){
-          if (nodes.find(i.getTag()) == nodes.end()){
-              nodes.insert(i.getTag());
-              mst.addNode(i.getTag(), i.getX(), i.getY());
-          }
+        if (nodes.find(i.getTag()) == nodes.end()){
+          nodes.insert(i.getTag());
+          mst.addNode(i.getTag(), i.getX(), i.getY());
+        }
       }
       return move(mst);
-      }
+    }
 
     // Julio
     map <N, int> BFS (N source) {
-        if (!findNode(source)) throw "The node does not belong to the graph";
-        map <N, int > d;
-        N s = source;
-        queue<N> cola;
-        set<N> used;
-        cola.push(s);
-        used.insert(s);
-        d[s] = 0;
-        while (!cola.empty()) {
-            N v = cola.front();
-            cola.pop();
-            for (N u : adjList[v]) {
-                if (!used.count(u)) {
-                    used.insert(u);
-                    cola.push(u);
-                    d[u] = d[v] + 1;
-                }
-            }
+      if (!findNode(source)) throw "The node does not belong to the graph";
+      map <N, int > d;
+      N s = source;
+      queue<N> cola;
+      set<N> used;
+      cola.push(s);
+      used.insert(s);
+      d[s] = 0;
+      while (!cola.empty()) {
+        N v = cola.front();
+        cola.pop();
+        for (N u : adjList[v]) {
+          if (!used.count(u)) {
+            used.insert(u);
+            cola.push(u);
+            d[u] = d[v] + 1;
+          }
         }
+      }
 
-        return std::move(d);
+      return std::move(d);
     }
 
     // Julio
     map <N, pair <int, int>> DFS (N source) {
-        if (!findNode(source)) throw "The node does not belong to the graph";
-        map <N, pair <int, int>> ret;
-        map <N, int> time_in;
-        map <N, int> time_out;
-        map <N, int> color;
-        int timer = 0;
-        dfsRec(source, time_in, time_out, color, timer);
-        for (auto pp: time_in) {
-            ret[pp.first] = {time_in[pp.first], time_out[pp.first]};
-        }
-        return ret;
+      if (!findNode(source)) throw "The node does not belong to the graph";
+      map <N, pair <int, int>> ret;
+      map <N, int> time_in;
+      map <N, int> time_out;
+      map <N, int> color;
+      int timer = 0;
+      dfsRec(source, time_in, time_out, color, timer);
+      for (auto pp: time_in) {
+        ret[pp.first] = {time_in[pp.first], time_out[pp.first]};
+      }
+      return ret;
     }
-                          
+
 
     // Leonidas
     pair <bool, map <N, bool>> getBipartiteAndColors () {
@@ -381,7 +401,7 @@ public:
 
     // Leonidas
     std::pair <int, map <N, int>> getStronglyConnectedComponents () {
-      queue <N> topo;
+      std::vector <N> topo;
       set <N> vis;
       std::function <void (N)> dfs1 = [&] (int u) -> void {
         vis.insert(u);
@@ -389,7 +409,7 @@ public:
           if (vis.count(v)) continue;
           dfs1(v);
         }
-        topo.push(u);
+        topo.push_back(u);
       };
       for (node u: nodeList) if (vis.count(u.getTag()) == 0) dfs1(u.getTag());
       set <N> visSCC;
@@ -401,8 +421,8 @@ public:
         for (N v: adjList_Trans[u]) if (visSCC.count(v) == 0) dfs2(v);
       };
       while (not topo.empty()) {
-        N u = topo.front();
-        topo.pop();
+        N u = topo.back();
+        topo.pop_back();
         if (visSCC.count(u)) continue;
         nComponents++;
         dfs2(u);
@@ -410,6 +430,7 @@ public:
       return {nComponents, component};
     }
 
+    bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
     void setDensityParameter (double density) const { denseParameter = density; }
     int getNumberOfNodes () const { return nodeList.size(); }
@@ -452,7 +473,7 @@ public:
 
     }
 
-private:
+      private:
 
     const double denseParameter = 0.5;
     set <node> nodeList;
@@ -461,19 +482,19 @@ private:
     map <N, set <N>> adjList_Trans;
     bool is_directed;
 
-    
-     void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
-        time_in[source] = dfs_timer++;
-        color[source] = 1;
-        for (N u : adjList[source])
-            if (color[u] == 0)
-                dfsRec(u,time_in,time_out,color,dfs_timer);
-        color[source] = 2;
-        time_out[source] = dfs_timer++;
-    }
-   
-    
 
-};
+    void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
+      time_in[source] = dfs_timer++;
+      color[source] = 1;
+      for (N u : adjList[source])
+        if (color[u] == 0)
+          dfsRec(u,time_in,time_out,color,dfs_timer);
+      color[source] = 2;
+      time_out[source] = dfs_timer++;
+    }
+
+
+
+    };
 
 #endif
