@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2017.2.3\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\graph_project_3_grafos_1_camino.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\graph_project_3_grafos_1_camino.dir/objects.a @CMakeFiles\graph_project_3_grafos_1_camino.dir\objects1.rsp
+C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\graph_project_3_grafos_1_camino.dir/objects.a -Wl,--no-whole-archive  -o graph_project_3_grafos_1_camino.exe -Wl,--out-implib,libgraph_project_3_grafos_1_camino.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\graph_project_3_grafos_1_camino.dir\linklibs.rsp

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="graph_project_3_grafos_1_camino"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="graph_project_3_grafos_1_camino">
+				<Option output="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/graph_project_3_grafos_1_camino.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 graph_project_3_grafos_1_camino"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="graph_project_3_grafos_1_camino/fast">
+				<Option output="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/graph_project_3_grafos_1_camino.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 graph_project_3_grafos_1_camino/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.gitignore">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/.name">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/codeStyles/Project.xml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/graph-project-3_grafos_1_camino.iml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/misc.xml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/modules.xml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/vcs.xml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.idea/workspace.xml">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.vscode/settings.json">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/.vscode/tasks.json">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/Graph/edge.h">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/Graph/graph.h">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/Graph/node.h">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/LICENSE">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/Makefile">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/README.md">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/contribution.md">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/test/main.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/README.md">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/fonts/arial.ttf">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Console.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/GraphUI.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/GraphView.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Grid.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/LoadGraph.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Menu.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/UI.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/BFS.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/Bipartite.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/DFS.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/Kruskal.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/Prim.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/Properties.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/SCC.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/Views/View.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/include/config.hpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-01.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-02.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-03.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-04.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-05.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-06.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-07.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-08.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/input/graph-09.txt">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/sound/music.wav">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/Console.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/GraphUI.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/Grid.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/LoadGraph.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/Menu.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/UI.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/ui/src/main.cpp">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/window">
+			<Option target="graph_project_3_grafos_1_camino"/>
+		</Unit>
+		<Unit filename="C:/Users/julio/Desktop/graph-project-3_grafos_1_camino/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

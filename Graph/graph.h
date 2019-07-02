@@ -473,6 +473,49 @@ class Graph {
 
     }
 
+
+    self fw (){
+        int ii = 1;
+        float matrix[getNumberOfNodes()+1][getNumberOfNodes()+1];
+        for (auto i = nodeList.begin(); i != nodeList.end(); i++){
+            matrix[1][ii] = i->getTag();
+        }
+        ii = 1;
+        for (auto j = nodeList.begin(); j != nodeList.end(); j++){
+            matrix[ii][1] = j->getTag();
+        }
+
+        for (int k = 1; k < getNumberOfNodes()+1 ; ++k) {
+            matrix [k][k] = 0;
+        }
+
+
+        //falta algortimo
+
+
+        return matrix;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       private:
 
     const double denseParameter = 0.5;
@@ -494,7 +537,9 @@ class Graph {
     }
 
 
-
     };
+
+
+
 
 #endif
