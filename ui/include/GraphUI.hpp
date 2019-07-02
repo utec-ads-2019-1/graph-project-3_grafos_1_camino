@@ -16,12 +16,9 @@ class GraphUI {
   private:
     Grid* grid;
     LoadGraph* loadGraph;
-    int currentGraph = -1;
-    bool loading = false;
-    Graph <char, int>* graphFile0;
-    GraphView <char, int>* graphView0;
-    Graph <char, float>* graphFile1;
-    GraphView <char, float>* graphView1;
+    int currentGraph = 0;
+    std::vector <Graph <char, float>*> graphFile;
+    std::vector <GraphView <char, float>*> graphView;
 };
 
 #endif

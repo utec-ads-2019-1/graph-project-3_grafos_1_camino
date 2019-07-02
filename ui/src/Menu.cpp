@@ -1,9 +1,6 @@
 #include "../include/Menu.hpp"
 #include "../include/config.hpp"
 
-#include <iostream>
-
-
 Menu::Menu (sf::Font*& font) {
   computeMenu(font);  
 }

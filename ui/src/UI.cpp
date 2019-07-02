@@ -1,8 +1,6 @@
 #include "../include/UI.hpp"
 #include "../include/config.hpp"
 
-#include <iostream>
-
 UI::UI () {
   window = new sf::RenderWindow();
   window -> create(sf::VideoMode(WIDTH, HEIGHT), WINDOW_NAME);
@@ -10,12 +8,18 @@ UI::UI () {
   if (not font -> loadFromFile(FONT_PATH)) {
     throw std::runtime_error("Could not load font from " + FONT_PATH + "\n");
   }
+  backgroundMusic = new sf::Music(); 
+  if (not backgroundMusic -> openFromFile(SOUND_PATH)) {
+    throw std::runtime_error("Could not load " + SOUND_PATH + "\n");
+}
   menu = new Menu(font);
   graphUI = new GraphUI(font);
+  backgroundMusic -> play();
 }
 
 UI::~UI () {
   delete font;
+  delete backgroundMusic;
   delete window;
   delete menu;
   delete graphUI;
