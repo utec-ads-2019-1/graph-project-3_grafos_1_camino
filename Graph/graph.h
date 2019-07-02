@@ -23,7 +23,7 @@ class Graph {
     typedef Node <N> node;
     typedef Edge <N, E> edge;
 
-    Graph (bool is_directed): is_directed(is_directed) {}
+    Graph (bool is_directed): is_directed(is_directed), negativeWeight(false) {}
 
     ~Graph () {
       nodeList.clear();
@@ -74,6 +74,7 @@ class Graph {
         return false;
       if(from == to)
         return false;
+      if (weight < 0) negativeWeight = true;  
       edge newEdge1 =  edge(from,to,weight);
       edgeList.insert(newEdge1);
       adjList[from].insert(to);
@@ -505,6 +506,82 @@ class Graph {
       // Do the algorithm
       return dis;
     }
+    
+    //Elvis
+    int getPosNode (N node) {
+      int pos = 0;
+      for (auto it : adjList) {
+        if (it.first == node) break;
+        pos++;
+      }
+      return pos;
+    } 
+
+    N getTag (int temp) {
+      int count = 0; 
+      for (auto it : adjList) {
+        if (count == temp ) return it.first;
+        count++;
+      }
+    }
+
+    //Elvis 
+    self Dijkstra (N initialNode) {
+      if (negativeWeight) throw "Dijkstra can't apply to this graph: negative weight(s)";
+      self dijkstraGraph(is_directed);
+      int numNodes = nodeList.size();
+      vector <bool> markedNodes(numNodes,false);
+      vector <E> lenghtPaths(numNodes, INF);
+      vector <N> prevNodes(numNodes,'0');
+      int posNode  = getPosNode(initialNode); 
+      lenghtPaths[posNode] = 0;
+      int temp;
+      for (int itNodes = 0; itNodes < numNodes; itNodes++) {
+        temp = -1;
+        for (int itAdjNodes = 0; itAdjNodes < numNodes; itAdjNodes++) {
+          if (!markedNodes[itAdjNodes] && (temp == -1 || lenghtPaths[itAdjNodes] < lenghtPaths[temp])) temp = itAdjNodes;
+        }
+        if (lenghtPaths[temp] == INF) break;
+        markedNodes[temp] = true;
+        N tagNode = getTag(temp);
+        for (auto itEdge : edgeList) {
+        	pair <N, N > nodes  = itEdge.getNodes();
+
+        	if (nodes.first != tagNode) continue;
+        	N toNode = nodes.second;
+        	E lenght = itEdge.getWeight();
+        	int toNodePos = getPosNode(toNode);
+        	if (lenghtPaths[temp] + lenght < lenghtPaths[toNodePos]) {
+            lenghtPaths[toNodePos] = lenghtPaths[temp] + lenght;
+            prevNodes[toNodePos] = tagNode;
+        	} 
+        }
+        for (auto i : prevNodes)  {
+          cout<<i<<endl;
+        }
+        cout<<endl;  
+      }
+      int posN = 0;
+      for (auto it : prevNodes)  {
+        N currentNode = getTag(posN);
+        if (!findNode(currentNode)) {
+          node *newNode = findNode(currentNode);
+          dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
+        }
+        while (it != '0') {
+          if (!findNode(it)) {
+            node *newNode = findNode(it);
+            dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
+          }
+          edge *newEdge = findEdge(currentNode, it);
+          dijkstraGraph.addEdge(newEdge -> getNodes().first, newEdge -> getNodes().second, newEdge -> getWeight());
+          currentNode = it;
+          it = prevNodes[getPosNode(it)];
+        }
+        posN++;
+      }
+      return move(dijkstraGraph);
+    }  
 
     bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
@@ -559,6 +636,7 @@ class Graph {
     map <N, set <N>> adjList_Trans;
     bool is_directed;
     const double INF = 1e17;
+    bool negativeWeight;
 
     void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
       time_in[source] = dfs_timer++;

@@ -158,9 +158,19 @@ int main (int argc, char *argv[]) {
     graph -> addEdge('d', 'g', 1.0);
     graph -> addEdge('c', 'f', 1.0);
     graph -> addEdge('i', 'f', 1.0);
-
-    // graph->A_asterisk('a','i').ImprimirGrafo();
-
+    testAddNode();
+    testFindNode();
+    testAddEdge();
+    testFindEdge();
+    testProperties();
+    //testPrim();
+    //testKruskal();
+    testDFS();
+    testBFS();
+    testConex();
+    testBipartite();
+    testSCC();
+    testDeleteNodeAndEdge();
     delete graph;
   } catch (const char* msg) {
     cerr << msg << endl;
