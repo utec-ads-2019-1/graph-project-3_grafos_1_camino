@@ -11,6 +11,11 @@ class Node {
     double getY () const { return y; }
     bool operator < (const Node& other) const { return tag < other.tag; }
     bool operator == (const Node& other) const { return tag == other.tag; }
+
+    double heuristic (Node goal) const {
+        return abs(x - goal.x) + abs( y- goal.y);
+    }
+
   private:
     N tag;
     double x;

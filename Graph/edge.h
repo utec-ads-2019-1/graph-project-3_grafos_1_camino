@@ -22,6 +22,7 @@ class Edge {
         return  from == other.from and to == other.to;
     }
 
+
   private:
     E weight;
     N from;
