@@ -14,7 +14,7 @@ UI::UI () {
 }
   menu = new Menu(font);
   graphUI = new GraphUI(font);
-  backgroundMusic -> play();
+  // backgroundMusic -> play();
 }
 
 UI::~UI () {

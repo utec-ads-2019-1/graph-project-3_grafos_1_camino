@@ -27,7 +27,11 @@ const std::vector <std::string> MENU_OPTIONS = {
   "Kruskal",
   "Bipartite",
   "SCC",
-  "Properties"
+  "Properties",
+  "A*",
+  "Dijkstra",
+  "Floyd Wharshall",
+  "Bellman Ford"
 };
 enum class MENU_INDEX {
   LOAD_FILE,
@@ -36,7 +40,11 @@ enum class MENU_INDEX {
   PRIM,
   KRUSKAL,
   SCC,
-  PROPERTIES
+  PROPERTIES,
+  A_STAR,
+  DIJSKTRA,
+  FLOYD_WARSHALL,
+  BELMAN_FORD
 };
 const float OPTION_WIDTH = 1.0 * (WIDTH - 2 * PROGRAM_PADDING) / 5;
 const float OPTION_HEIGHT = 1.0 * (HEIGHT - 2 * PROGRAM_PADDING) / int(MENU_OPTIONS.size());

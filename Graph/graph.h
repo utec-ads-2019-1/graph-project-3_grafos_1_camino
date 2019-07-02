@@ -430,6 +430,23 @@ class Graph {
       return {nComponents, component};
     }
 
+    // {distances, {have_cycles, graph containing only the cycles}}
+    std::pair <std::map <N, double>, std::pair <bool, self>> bellmandFord (N source) {
+      std::map <N, double> dis;
+      for (node u: nodeList) dis[u.getTag()] = INF;
+      dis[source] = 0;
+      for (int i = 0; i < getNumberOfNodes() - 1; i++) {
+        for (edge e: edgeList) {
+          if (dis[e.getFrom()] < INF) {
+            dis[e.getTo()] = min(dis[e.getTo()], dis[e.getFrom()] + e.getWeight());
+          }
+        }
+      }
+      self cycles(is_directed);
+      // Get cycles
+      return {dis, {false, cycles}};
+    }
+
     bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
     void setDensityParameter (double density) const { denseParameter = density; }
@@ -437,6 +454,7 @@ class Graph {
     int getNumberOfEdges () const { return edgeList.size(); }
     set <node> getNodeList () const { return nodeList; }
     set <edge> getEdgeList () const { return edgeList; }
+    double getInfinity () const { return INF; }
 
     void ImprimirGrafo(){
 
@@ -481,7 +499,7 @@ class Graph {
     map <N, set <N>> adjList;
     map <N, set <N>> adjList_Trans;
     bool is_directed;
-
+    const double INF = 1e17;
 
     void dfsRec(N source, map <N, int>& time_in, map <N, int>& time_out, map <N, int>& color, int& dfs_timer) {
       time_in[source] = dfs_timer++;

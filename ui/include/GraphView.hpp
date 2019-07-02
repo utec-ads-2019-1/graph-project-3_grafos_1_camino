@@ -7,6 +7,10 @@
 #include "./Views/Bipartite.hpp"
 #include "./Views/SCC.hpp"
 #include "./Views/Properties.hpp"
+#include "./Views/A_Star.hpp"
+#include "./Views/Dijkstra.hpp"
+#include "./Views/Floyd_Warshall.hpp"
+#include "./Views/Bellman_Ford.hpp"
 #include "../../Graph/graph.h"
 #include "config.hpp"
 
@@ -22,6 +26,10 @@ class GraphView {
       views.push_back(new Bipartite <N, E> (graph, "Bipartite", font));
       views.push_back(new SCC <N, E> (graph, "SCC", font));
       views.push_back(new Properties <N, E> (graph, "Properties", font));
+      views.push_back(new A_Star <N, E> (graph, "A*", font));
+      views.push_back(new Dijkstra <N, E> (graph, "Dijkstra", font));
+      views.push_back(new FloydWarshall <N, E> (graph, "Floyd Warshall", font));
+      views.push_back(new BellmanFord <N, E> (graph, "Bellman Ford", font));
     }
     ~GraphView () {
       for (auto* elem: views) delete elem;
