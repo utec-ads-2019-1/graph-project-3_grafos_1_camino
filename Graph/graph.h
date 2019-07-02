@@ -499,6 +499,17 @@ class Graph {
       return {dis, {false, cycles}};
     }
 
+    std::map <N, std::map <N, double>> floydWarshall () {
+      std::map <N, std::map <N, double>> dis;
+      for (N u: nodeList) {
+        for (N v: nodeList) {
+          dis[u][v] = INF;
+        }
+      }
+      // Do the algorithm
+      return dis;
+    }
+
     bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
     void setDensityParameter (double density) const { denseParameter = density; }
