@@ -16,10 +16,6 @@
 
 using namespace std;
 
-const int INF = 1000000000;
-
-
-
 template <typename N, typename E>
 class Graph {
   public:
