@@ -160,7 +160,7 @@ int main (int argc, char *argv[]) {
     graph -> addEdge('i', 'f', 1.0);
 
 
-    graph->AStar('a','i').ImprimirGrafo();
+    graph->A_asterisk('a','i').ImprimirGrafo();
 
     delete graph;
   } catch (const char* msg) {

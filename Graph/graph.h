@@ -16,7 +16,7 @@
 
 using namespace std;
 
-
+const int INF = 1000000000;
 
 
 
@@ -269,56 +269,53 @@ class Graph {
 
 
 
-    self AStar(N start,N goal){
+    self A_asterisk(N start,N goal){
 
       self mst(is_directed);
 
-      std::unordered_map<N, N> came_from;
-      std::unordered_map<N,double> cost_so_far;
-      set<pair<N, double>> frontier;
-      frontier.insert({start, 0});
+      std::unordered_map<N, N> parent;
+      std::unordered_map<N,double> g_node;
+      set<pair<N, double>> f_node;
+      f_node.insert({start, 0});
 
-      came_from[start] = start;
-      cost_so_far[start] = 0;
+      parent[start] = start;
+      g_node[start] = 0;
 
-      while (!frontier.empty()) {
-        N current = frontier.begin()->first;
-        frontier.erase(frontier.begin());
+      while (!f_node.empty()) {
+        N current = f_node.begin()->first;
+        f_node.erase(f_node.begin());
         if (current == goal) {
           break;
         }
-
         set<N> neighbors_current = adjList[current];
         for (N next : neighbors_current) {
 
           E costo_current_next = findEdge(current,next)->getWeight();
-          double g = cost_so_far[current] + costo_current_next;
-          if (cost_so_far.find(next) == cost_so_far.end()
-              || g < cost_so_far[next]) {
-            cost_so_far[next] = g;
+          double g = g_node[current] + costo_current_next;
+          if (g_node.find(next) == g_node.end()
+              || g < g_node[next]) {
+            g_node[next] = g;
             double heuristic = findNode(next)->heuristic(*findNode(goal));
             double f = g + heuristic;
-            frontier.insert({next, f});
-            came_from[next] = current;
+            f_node.insert({next, f});
+            parent[next] = current;
+
           }
         }
       }
 
-
-      if(came_from.find(goal) == came_from.end()) throw "Camino no encontrado";
-
+      if(parent.find(goal) == parent.end()) throw "Camino no encontrado";
 
       N back = goal;
       node* n = findNode(back);
       mst.addNode(n->getTag(),n->getX(),n->getY());
       while (back != start){
-        edge * e = findEdge(came_from[back],back);
-        back = came_from[back];
+        edge * e = findEdge(parent[back],back);
+        back = parent[back];
         n = findNode(back);
         mst.addNode(n->getTag(),n->getX(),n->getY());
         mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
       }
-
       return move(mst);
     }
 
