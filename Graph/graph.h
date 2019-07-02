@@ -12,8 +12,13 @@
 #include <typeinfo>
 #include "node.h"
 #include "edge.h"
+#include <unordered_map>
 
 using namespace std;
+
+
+
+
 
 template <typename N, typename E>
 class Graph {
@@ -205,7 +210,6 @@ class Graph {
       if (is_directed) throw "The graph must be undirected";
 
       self mst(is_directed);
-
       node* current = findNode(tag);
       set <N> currentNodes;
       mst.addNode(current->getTag(),current->getX(),current->getY());
@@ -213,11 +217,6 @@ class Graph {
 
       int i = 1;
       while (current){
-
-        //    cout << "nodos actuales : " ;
-        //for (auto i: currentNodes)
-        //cout << i << " ";
-        //cout << endl;
         vector<edge> availableEdges;
         for (auto A : currentNodes){
           for (auto it = adjList.begin();it != adjList.end();it++){
@@ -229,7 +228,6 @@ class Graph {
                 } else{
                   edge* ed  = findEdge(A,B);
                   availableEdges.push_back(*ed);
-
                 }
               }
               //  cout <<endl;
@@ -268,6 +266,64 @@ class Graph {
       }
       return move(mst);
     }
+
+
+
+    self AStar(N start,N goal){
+
+      self mst(is_directed);
+
+      std::unordered_map<N, N> came_from;
+      std::unordered_map<N,double> cost_so_far;
+      set<pair<N, double>> frontier;
+      frontier.insert({start, 0});
+
+      came_from[start] = start;
+      cost_so_far[start] = 0;
+
+      while (!frontier.empty()) {
+        N current = frontier.begin()->first;
+        frontier.erase(frontier.begin());
+        if (current == goal) {
+          break;
+        }
+
+        set<N> neighbors_current = adjList[current];
+        for (N next : neighbors_current) {
+
+          E costo_current_next = findEdge(current,next)->getWeight();
+          double g = cost_so_far[current] + costo_current_next;
+          if (cost_so_far.find(next) == cost_so_far.end()
+              || g < cost_so_far[next]) {
+            cost_so_far[next] = g;
+            double heuristic = findNode(next)->heuristic(*findNode(goal));
+            double f = g + heuristic;
+            frontier.insert({next, f});
+            came_from[next] = current;
+          }
+        }
+      }
+
+
+      if(came_from.find(goal) == came_from.end()) throw "Camino no encontrado";
+
+
+      N back = goal;
+      node* n = findNode(back);
+      mst.addNode(n->getTag(),n->getX(),n->getY());
+      while (back != start){
+        edge * e = findEdge(came_from[back],back);
+        back = came_from[back];
+        n = findNode(back);
+        mst.addNode(n->getTag(),n->getX(),n->getY());
+        mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
+      }
+
+      return move(mst);
+    }
+
+
+
 
     self Kruskal () {
       if (is_directed) throw "The graph must be undirected";

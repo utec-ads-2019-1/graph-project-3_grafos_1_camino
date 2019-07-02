@@ -136,19 +136,32 @@ void testDeleteNodeAndEdge () {
 int main (int argc, char *argv[]) {
   try {
     graph = new Graph <char, float> (false);
-    testAddNode();
-    testFindNode();
-    testAddEdge();
-    testFindEdge();
-    testProperties();
-    //testPrim();
-    //testKruskal();
-    testDFS();
-    testBFS();
-    testConex();
-    testBipartite();
-    testSCC();
-    testDeleteNodeAndEdge();
+    graph -> addNode('a', 0.0, 0.0);
+    graph -> addNode('b', 0.0, 1.0);
+    graph -> addNode('c', 0.0, 2.0);
+    graph -> addNode('d', 1.0, 0.0);
+    graph -> addNode('e', 1.0, 1.0);
+    graph -> addNode('f', 1.0, 2.0);
+    graph -> addNode('g', 2.0, 0.0);
+    graph -> addNode('h', 2.0, 1.0);
+    graph -> addNode('i', 2.0, 2.0);
+
+    graph -> addEdge('a', 'b', 1.0);
+    graph -> addEdge('b', 'c', 1.0);
+    graph -> addEdge('b', 'e', 1.0);
+    graph -> addEdge('h', 'e', 1.0);
+    graph -> addEdge('d', 'e', 1.0);
+    graph -> addEdge('e', 'f', 1.0);
+    graph -> addEdge('g', 'h', 1.0);
+    graph -> addEdge('h', 'i', 1.0);
+    graph -> addEdge('a', 'd', 1.0);
+    graph -> addEdge('d', 'g', 1.0);
+    graph -> addEdge('c', 'f', 1.0);
+    graph -> addEdge('i', 'f', 1.0);
+
+
+    graph->AStar('a','i').ImprimirGrafo();
+
     delete graph;
   } catch (const char* msg) {
     cerr << msg << endl;
