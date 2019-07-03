@@ -2,8 +2,6 @@
 
 #include "View.hpp"
 
-const int TIMER = 60 * 3;
-
 template <typename N, typename E>
 class Dijkstra : public View <N, E> {
   public:

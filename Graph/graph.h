@@ -266,7 +266,26 @@ class Graph {
 
 
 
-    self A_asterisk(N start,N goal){
+    std::vector <std::pair <self, std::map <N, double>>>  A_asterisk(N start,N goal){
+
+      std::vector <std::pair <self, std::map <N, double>>> ret;
+      std::map <N, double> dis;
+      std::set <edge> visited;
+      for (node u: nodeList) dis[u.getTag()] = INF;
+      dis[start] = 0;
+      auto addGraph = [&] () {
+        self g(is_directed);
+        for (edge e: visited) {
+          node* from = findNode(e.getFrom());
+          g.addNode(from -> getTag(), from -> getX(), from -> getY());
+          node* to = findNode(e.getTo());
+          g.addNode(to -> getTag(), to -> getX(), to -> getY());
+          g.addEdge(e.getFrom(), e.getTo(), e.getWeight());
+        }
+        ret.push_back({g, dis});
+      };
+
+
 
       self mst(is_directed);
 
@@ -275,8 +294,11 @@ class Graph {
       set<pair<N, double>> f_node;
       f_node.insert({start, 0});
 
+
       parent[start] = start;
       g_node[start] = 0;
+
+      addGraph();
 
       while (!f_node.empty()) {
         N current = f_node.begin()->first;
@@ -287,21 +309,30 @@ class Graph {
         set<N> neighbors_current = adjList[current];
         for (N next : neighbors_current) {
 
+          edge* e = findEdge(current, next);
+          visited.insert(*e);
           E costo_current_next = findEdge(current,next)->getWeight();
           double g = g_node[current] + costo_current_next;
+
           if (g_node.find(next) == g_node.end()
               || g < g_node[next]) {
             g_node[next] = g;
             double heuristic = findNode(next)->heuristic(*findNode(goal));
             double f = g + heuristic;
             f_node.insert({next, f});
+            dis[next] = g;
             parent[next] = current;
-
+            visited.insert(*e);
+            addGraph();
           }
+
         }
       }
 
-      if(parent.find(goal) == parent.end()) throw "Camino no encontrado";
+      if(parent.find(goal) == parent.end()) {
+        ret.push_back({mst, dis});
+        return ret;
+      }
 
       N back = goal;
       node* n = findNode(back);
@@ -313,7 +344,8 @@ class Graph {
         mst.addNode(n->getTag(),n->getX(),n->getY());
         mst.addEdge(e->getNodes().first,e->getNodes().second,e->getWeight());
       }
-      return move(mst);
+      ret.push_back({mst, dis});
+      return ret;
     }
 
 
@@ -557,7 +589,6 @@ class Graph {
         if (u == targetNode) break;
         for (N v: adjList[u]) {
           edge* e = findEdge(u, v);
-          visited.insert(*e);
           E w = e -> getWeight();
           addGraph();
           if (dis[v] > dis[u] + w) {
@@ -565,10 +596,9 @@ class Graph {
             dis[v] = dis[u] + w;
             path[v] = u;
             Q.insert({dis[v], v});
-          } else {
-            visited.erase(*e);
-          }
-          addGraph();
+            visited.insert(*e);
+            addGraph();
+          } 
         }
       }
       self g(is_directed);

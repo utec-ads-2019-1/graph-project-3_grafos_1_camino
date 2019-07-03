@@ -80,6 +80,7 @@ const float CONSOLE_PADDING = CONSOLE_WIDTH / 10;
 const sf::Color CONSOLE_COLOR = sf::Color::Green;
 
 // GRAPH UI
+const int TIMER = 60 * 1 + 30 * 1;
 const float VERTEX_RADIUS = 15.f;
 const sf::Color VERTEX_COLOR = sf::Color::White;
 const sf::Color VERTEX_TEXT_COLOR = sf::Color::Red;
