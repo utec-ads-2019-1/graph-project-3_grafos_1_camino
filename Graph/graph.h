@@ -265,7 +265,7 @@ class Graph {
     }
 
 
-
+    // Daniel
     std::vector <std::pair <self, std::map <N, double>>>  A_asterisk(N start,N goal){
 
       std::vector <std::pair <self, std::map <N, double>>> ret;
@@ -509,6 +509,7 @@ class Graph {
       return {nComponents, component};
     }
 
+    // Leonidas
     std::vector <std::pair <self, std::map <N, double>>> BellmandFord (N source) {
       std::map <N, double> dis;
       std::map <N, N> path;
@@ -554,6 +555,7 @@ class Graph {
       return ret;
     }
 
+    // Julio
     std::pair <std::map <N, std::map <N, double>>, std::map <N, std::map <N, N>>> FloydWarshall () {
       std::map <N, std::map <N, double>> dis;
       std::map <N, std::map <N, N>> path;
@@ -602,13 +604,79 @@ class Graph {
     //Elvis
     std::vector <std::pair <self, std::map <N, double>>> Dijkstra (N initialNode, N targetNode) {
       if (negativeWeight) throw "Dijkstra can't apply to this graph: negative weight(s)";
+      /*
+         std::vector <std::pair <self, std::map <N, double>>> ret;
+         std::set <edge> visited;
+         std::map <N, double> dis;
+         std::map <N, N> path;
+         for (node u: nodeList) dis[u.getTag()] = INF;
+         std::set <std::pair <double, N>> Q;
+         Q.insert({0, initialNode});
+         dis[initialNode] = 0;
+
+         auto addGraph = [&] () {
+         self g(is_directed);
+         for (edge e: visited) {
+         node* from = findNode(e.getFrom());
+         g.addNode(from -> getTag(), from -> getX(), from -> getY());
+         node* to = findNode(e.getTo());
+         g.addNode(to -> getTag(), to -> getX(), to -> getY());
+         g.addEdge(e.getFrom(), e.getTo(), e.getWeight());
+         }
+         ret.push_back({g, dis});
+         };
+
+         addGraph();
+
+         while (not Q.empty()) {
+         N u = (*begin(Q)).second;
+         Q.erase(begin(Q));
+         if (u == targetNode) break;
+         for (N v: adjList[u]) {
+         edge* e = findEdge(u, v);
+         E w = e -> getWeight();
+         addGraph();
+         if (dis[v] > dis[u] + w) {
+         Q.erase({dis[v], v});
+         dis[v] = dis[u] + w;
+         path[v] = u;
+         Q.insert({dis[v], v});
+         visited.insert(*e);
+         addGraph();
+         }
+         }
+         }
+         self g(is_directed);
+         N cur = targetNode;
+         while (path.count(cur)) {
+         N go = path[cur];
+         edge* e = findEdge(go, cur);
+         node* from = findNode(e -> getFrom());
+         g.addNode(from -> getTag(), from -> getX(), from -> getY());
+         node* to = findNode(e -> getTo());
+         g.addNode(to -> getTag(), to -> getX(), to -> getY());
+         g.addEdge(e -> getFrom(), e -> getTo(), e -> getWeight());
+         cur = go;
+         }
+         ret.push_back({g, dis});
+         return ret;
+         */
+
+
+      self dijkstraGraph(is_directed);
+      int numNodes = nodeList.size();
+      vector <bool> markedNodes(numNodes,false);
+      vector <E> lenghtPaths(numNodes, INF);
+      vector <N> prevNodes(numNodes, '@');
+      int posNode  = getPosNode(initialNode);
+      lenghtPaths[posNode] = 0;
+      int temp;
+
       std::vector <std::pair <self, std::map <N, double>>> ret;
       std::set <edge> visited;
       std::map <N, double> dis;
       std::map <N, N> path;
       for (node u: nodeList) dis[u.getTag()] = INF;
-      std::set <std::pair <double, N>> Q;
-      Q.insert({0, initialNode});
       dis[initialNode] = 0;
 
       auto addGraph = [&] () {
@@ -625,103 +693,53 @@ class Graph {
 
       addGraph();
 
-      while (not Q.empty()) {
-        N u = (*begin(Q)).second;
-        Q.erase(begin(Q));
-        if (u == targetNode) break;
-        for (N v: adjList[u]) {
-          edge* e = findEdge(u, v);
-          E w = e -> getWeight();
-          addGraph();
-          if (dis[v] > dis[u] + w) {
-            Q.erase({dis[v], v});
-            dis[v] = dis[u] + w;
-            path[v] = u;
-            Q.insert({dis[v], v});
-            visited.insert(*e);
+      for (int itNodes = 0; itNodes < numNodes; itNodes++) {
+        temp = -1;
+        for (int itAdjNodes = 0; itAdjNodes < numNodes; itAdjNodes++) {
+          if (!markedNodes[itAdjNodes] && (temp == -1 || lenghtPaths[itAdjNodes] < lenghtPaths[temp])) temp = itAdjNodes;
+        }
+        if (lenghtPaths[temp] == INF) break;
+        markedNodes[temp] = true;
+        N tagNode = getTag(temp);
+        for (auto itEdge : edgeList) {
+
+          N from = itEdge.getFrom();
+          N to = itEdge.getTo();
+          pair <N, N > nodes  = itEdge.getNodes();
+
+          if (nodes.first != tagNode) continue;
+          N toNode = nodes.second;
+          E lenght = itEdge.getWeight();
+          int toNodePos = getPosNode(toNode);
+          if (lenghtPaths[temp] + lenght < lenghtPaths[toNodePos]) {
+            lenghtPaths[toNodePos] = lenghtPaths[temp] + lenght;
+            prevNodes[toNodePos] = tagNode;
+
+            // Adding this for the step by step
+            dis[to] = lenghtPaths[toNodePos];
+            visited.insert(itEdge);
             addGraph();
           }
         }
+
       }
-      self g(is_directed);
-      N cur = targetNode;
-      while (path.count(cur)) {
-        N go = path[cur];
-        edge* e = findEdge(go, cur);
-        node* from = findNode(e -> getFrom());
-        g.addNode(from -> getTag(), from -> getX(), from -> getY());
-        node* to = findNode(e -> getTo());
-        g.addNode(to -> getTag(), to -> getX(), to -> getY());
-        g.addEdge(e -> getFrom(), e -> getTo(), e -> getWeight());
-        cur = go;
+
+      N currentNode = targetNode;
+      while (currentNode != initialNode) {
+        N go = prevNodes[getPosNode(currentNode)];
+        node *newNode = findNode(currentNode);
+        dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
+        node*goNode = findNode(go);
+        dijkstraGraph.addNode(goNode -> getTag(), goNode -> getX(), goNode -> getY());
+        edge *newEdge = findEdge(go, currentNode);
+        dijkstraGraph.addEdge(newEdge -> getNodes().first, newEdge -> getNodes().second, newEdge -> getWeight());
+        currentNode = go;
       }
-      ret.push_back({g, dis});
+
+      ret.push_back({dijkstraGraph, dis});
+
       return ret;
 
-      /*
-         self dijkstraGraph(is_directed);
-         int numNodes = nodeList.size();
-         vector <bool> markedNodes(numNodes,false);
-         vector <E> lenghtPaths(numNodes, INF);
-         vector <N> prevNodes(numNodes, '@');
-         int posNode  = getPosNode(initialNode);
-         lenghtPaths[posNode] = 0;
-         int temp;
-
-
-         for (int itNodes = 0; itNodes < numNodes; itNodes++) {
-         temp = -1;
-         for (int itAdjNodes = 0; itAdjNodes < numNodes; itAdjNodes++) {
-         if (!markedNodes[itAdjNodes] && (temp == -1 || lenghtPaths[itAdjNodes] < lenghtPaths[temp])) temp = itAdjNodes;
-         }
-         if (lenghtPaths[temp] == INF) break;
-         markedNodes[temp] = true;
-         N tagNode = getTag(temp);
-         for (auto itEdge : edgeList) {
-
-         pair <N, N > nodes  = itEdge.getNodes();
-
-         if (nodes.first != tagNode) continue;
-         N toNode = nodes.second;
-         E lenght = itEdge.getWeight();
-         int toNodePos = getPosNode(toNode);
-         if (lenghtPaths[temp] + lenght < lenghtPaths[toNodePos]) {
-         lenghtPaths[toNodePos] = lenghtPaths[temp] + lenght;
-         prevNodes[toNodePos] = tagNode;
-
-      // Adding this for the step by step
-      dis[nodePos[toNodePos]] = lenghtPaths[toNodePos];
-
-      }
-      }
-
-      }
-
-      N cur = targetNode;
-
-      int posN = 0;
-      for (auto it : prevNodes)  {
-      N currentNode = getTag(posN);
-      if (!findNode(currentNode)) {
-      node *newNode = findNode(currentNode);
-      dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
-      }
-      while (it != initialNode) {
-      if (!findNode(it)) {
-      node *newNode = findNode(it);
-      dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
-      }
-      edge *newEdge = findEdge(currentNode, it);
-      dijkstraGraph.addEdge(newEdge -> getNodes().first, newEdge -> getNodes().second, newEdge -> getWeight());
-      currentNode = it;
-      it = prevNodes[getPosNode(it)];
-      }
-      posN++;
-      }
-
-      return move(dijkstraGraph);
-
-*/
     }
 
     bool isDirected () const { return is_directed; }
