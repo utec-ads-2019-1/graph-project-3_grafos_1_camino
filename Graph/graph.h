@@ -562,6 +562,15 @@ class Graph {
         }
       }
       // Do the algorithm
+        for (int k = 0; k < getNumberOfNodes(); ++k) {
+            for (int i = 0; i < getNumberOfNodes(); ++i) {
+                for (int j = 0; j < getNumberOfNodes(); ++j) {
+                    dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j]);
+                }
+            }
+        }
+
+
       return dis;
     }
 
