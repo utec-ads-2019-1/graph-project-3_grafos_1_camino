@@ -74,7 +74,7 @@ class Graph {
         return false;
       if(from == to)
         return false;
-      if (weight < 0) negativeWeight = true;  
+      if (weight < 0) negativeWeight = true;
       edge newEdge1 =  edge(from,to,weight);
       edgeList.insert(newEdge1);
       adjList[from].insert(to);
@@ -349,8 +349,6 @@ class Graph {
     }
 
 
-
-
     self Kruskal () {
       if (is_directed) throw "The graph must be undirected";
       self mst(is_directed);
@@ -511,21 +509,49 @@ class Graph {
       return {nComponents, component};
     }
 
-    // {distances, {have_cycles, graph containing only the cycles}}
-    std::pair <std::map <N, double>, std::pair <bool, self>> bellmandFord (N source) {
+    std::vector <std::pair <self, std::map <N, double>>> BellmandFord (N source) {
       std::map <N, double> dis;
+      std::map <N, N> path;
       for (node u: nodeList) dis[u.getTag()] = INF;
       dis[source] = 0;
       for (int i = 0; i < getNumberOfNodes() - 1; i++) {
         for (edge e: edgeList) {
           if (dis[e.getFrom()] < INF) {
-            dis[e.getTo()] = min(dis[e.getTo()], dis[e.getFrom()] + e.getWeight());
+            if (dis[e.getTo()] > dis[e.getFrom()] + e.getWeight()) {
+              dis[e.getTo()] = dis[e.getFrom()] + e.getWeight();
+              path[e.getTo()] = e.getFrom();
+            }
+          }
+        }
+      }
+      set <N> node_with_cycle;
+      for (edge e: edgeList) {
+        if (dis[e.getFrom()] < INF) {
+          if (dis[e.getTo()] > dis[e.getFrom()] + e.getWeight()) {
+            node_with_cycle.insert(e.getTo());
+            path[e.getTo()] = e.getFrom();
           }
         }
       }
       self cycles(is_directed);
-      // Get cycles
-      return {dis, {false, cycles}};
+      for (N u: node_with_cycle) {
+        N cur = u;
+        int cnt = 0;
+        while (true) {
+          N go = path[cur];
+          edge* e = findEdge(go, cur);
+          node* from = findNode(e -> getFrom());
+          cycles.addNode(from -> getTag(), from -> getX(), from -> getY());
+          node* to = findNode(e -> getTo());
+          cycles.addNode(to -> getTag(), to -> getX(), to -> getY());
+          cycles.addEdge(e -> getFrom(), e -> getTo(), e -> getWeight());
+          cur = go;
+          if (go == u) break;
+        }
+      }
+      std::vector <std::pair <self, std::map <N, double>>> ret;
+      ret.push_back({cycles, dis});
+      return ret;
     }
 
     std::map <N, std::map <N, double>> floydWarshall () {
@@ -538,7 +564,7 @@ class Graph {
       // Do the algorithm
       return dis;
     }
-    
+
     //Elvis
     int getPosNode (N node) {
       int pos = 0;
@@ -547,17 +573,17 @@ class Graph {
         pos++;
       }
       return pos;
-    } 
+    }
 
     N getTag (int temp) {
-      int count = 0; 
+      int count = 0;
       for (auto it : adjList) {
         if (count == temp ) return it.first;
         count++;
       }
     }
 
-    //Elvis 
+    //Elvis
     std::vector <std::pair <self, std::map <N, double>>> Dijkstra (N initialNode, N targetNode) {
       if (negativeWeight) throw "Dijkstra can't apply to this graph: negative weight(s)";
       std::vector <std::pair <self, std::map <N, double>>> ret;
@@ -598,7 +624,7 @@ class Graph {
             Q.insert({dis[v], v});
             visited.insert(*e);
             addGraph();
-          } 
+          }
         }
       }
       self g(is_directed);
@@ -615,72 +641,72 @@ class Graph {
       }
       ret.push_back({g, dis});
       return ret;
-      
-      /*      
-      self dijkstraGraph(is_directed);
-      int numNodes = nodeList.size();
-      vector <bool> markedNodes(numNodes,false);
-      vector <E> lenghtPaths(numNodes, INF);
-      vector <N> prevNodes(numNodes, '@');
-      int posNode  = getPosNode(initialNode); 
-      lenghtPaths[posNode] = 0;
-      int temp;
+
+      /*
+         self dijkstraGraph(is_directed);
+         int numNodes = nodeList.size();
+         vector <bool> markedNodes(numNodes,false);
+         vector <E> lenghtPaths(numNodes, INF);
+         vector <N> prevNodes(numNodes, '@');
+         int posNode  = getPosNode(initialNode);
+         lenghtPaths[posNode] = 0;
+         int temp;
 
 
-      for (int itNodes = 0; itNodes < numNodes; itNodes++) {
-        temp = -1;
-        for (int itAdjNodes = 0; itAdjNodes < numNodes; itAdjNodes++) {
-          if (!markedNodes[itAdjNodes] && (temp == -1 || lenghtPaths[itAdjNodes] < lenghtPaths[temp])) temp = itAdjNodes;
-        }
-        if (lenghtPaths[temp] == INF) break;
-        markedNodes[temp] = true;
-        N tagNode = getTag(temp);
-        for (auto itEdge : edgeList) {
-          
-        	pair <N, N > nodes  = itEdge.getNodes();
+         for (int itNodes = 0; itNodes < numNodes; itNodes++) {
+         temp = -1;
+         for (int itAdjNodes = 0; itAdjNodes < numNodes; itAdjNodes++) {
+         if (!markedNodes[itAdjNodes] && (temp == -1 || lenghtPaths[itAdjNodes] < lenghtPaths[temp])) temp = itAdjNodes;
+         }
+         if (lenghtPaths[temp] == INF) break;
+         markedNodes[temp] = true;
+         N tagNode = getTag(temp);
+         for (auto itEdge : edgeList) {
 
-        	if (nodes.first != tagNode) continue;
-        	N toNode = nodes.second;
-        	E lenght = itEdge.getWeight();
-        	int toNodePos = getPosNode(toNode);
-        	if (lenghtPaths[temp] + lenght < lenghtPaths[toNodePos]) {
-            lenghtPaths[toNodePos] = lenghtPaths[temp] + lenght;
-            prevNodes[toNodePos] = tagNode;
-           
-            // Adding this for the step by step
-            dis[nodePos[toNodePos]] = lenghtPaths[toNodePos];
-        	
-          }
-        }
-      
+         pair <N, N > nodes  = itEdge.getNodes();
+
+         if (nodes.first != tagNode) continue;
+         N toNode = nodes.second;
+         E lenght = itEdge.getWeight();
+         int toNodePos = getPosNode(toNode);
+         if (lenghtPaths[temp] + lenght < lenghtPaths[toNodePos]) {
+         lenghtPaths[toNodePos] = lenghtPaths[temp] + lenght;
+         prevNodes[toNodePos] = tagNode;
+
+      // Adding this for the step by step
+      dis[nodePos[toNodePos]] = lenghtPaths[toNodePos];
+
+      }
+      }
+
       }
 
       N cur = targetNode;
 
       int posN = 0;
       for (auto it : prevNodes)  {
-        N currentNode = getTag(posN);
-        if (!findNode(currentNode)) {
-          node *newNode = findNode(currentNode);
-          dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
-        }
-        while (it != initialNode) {
-          if (!findNode(it)) {
-            node *newNode = findNode(it);
-            dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
-          }
-          edge *newEdge = findEdge(currentNode, it);
-          dijkstraGraph.addEdge(newEdge -> getNodes().first, newEdge -> getNodes().second, newEdge -> getWeight());
-          currentNode = it;
-          it = prevNodes[getPosNode(it)];
-        }
-        posN++;
+      N currentNode = getTag(posN);
+      if (!findNode(currentNode)) {
+      node *newNode = findNode(currentNode);
+      dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
+      }
+      while (it != initialNode) {
+      if (!findNode(it)) {
+      node *newNode = findNode(it);
+      dijkstraGraph.addNode(newNode -> getTag(), newNode -> getX(), newNode -> getY());
+      }
+      edge *newEdge = findEdge(currentNode, it);
+      dijkstraGraph.addEdge(newEdge -> getNodes().first, newEdge -> getNodes().second, newEdge -> getWeight());
+      currentNode = it;
+      it = prevNodes[getPosNode(it)];
+      }
+      posN++;
       }
 
       return move(dijkstraGraph);
 
-      */
-    }  
+*/
+    }
 
     bool isDirected () const { return is_directed; }
     bool isConex () { return getStronglyConnectedComponents().first == 1; }
@@ -690,6 +716,7 @@ class Graph {
     set <node> getNodeList () const { return nodeList; }
     set <edge> getEdgeList () const { return edgeList; }
     double getInfinity () const { return INF; }
+    bool haveNegativeWeight () const { return negativeWeight; }
 
     void ImprimirGrafo(){
 

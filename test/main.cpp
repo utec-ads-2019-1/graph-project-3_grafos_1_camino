@@ -133,6 +133,31 @@ void testDeleteNodeAndEdge () {
   graph -> deleteNode('a');
 }
 
+void testBellmandFord () {
+  Graph <char, float>* graph = new Graph <char, float> (true);
+  graph -> addNode('A', 0, 10);
+  graph -> addNode('B', -10, 10);
+  graph -> addNode('C', 10, 10);
+  graph -> addNode('D', 0, 0);
+  graph -> addNode('E', -10, -10);
+  graph -> addNode('F', 10, -10);
+  graph -> addEdge('A', 'B', 100);
+  graph -> addEdge('A', 'C', 100);
+  graph -> addEdge('B', 'C', 100);
+  graph -> addEdge('C', 'D', -1);
+  graph -> addEdge('D', 'C', -1);
+  graph -> addEdge('D', 'E', 100);
+  graph -> addEdge('E', 'F', -1);
+  graph -> addEdge('F', 'E', -1);
+  std::vector <std::pair <Graph <char, float>, std::map <char, double>>> ret = graph -> BellmandFord('A');
+  bool haveCycles = ret[0].first.getNumberOfNodes() > 0;
+  if (not haveCycles) cerr << "Bellmand Ford is not detenting negative cycles" << endl;
+  set <Node <char>> nodeList = ret[0].first.getNodeList();
+  string nodes = "";
+  for (auto elem: nodeList) nodes += elem.getTag();
+  if (nodes != "CDEF") cerr << "Bellmand Ford is not detenting negative cycles properly" << endl;
+}
+
 int main (int argc, char *argv[]) {
   try {
     graph = new Graph <char, float> (false);
@@ -149,6 +174,8 @@ int main (int argc, char *argv[]) {
     testBipartite();
     testSCC();
     testDeleteNodeAndEdge();
+    testBellmandFord();
+    cout << "If just this is printed then all test passed successfully passed!" << endl;
     delete graph;
   } catch (const char* msg) {
     cerr << msg << endl;

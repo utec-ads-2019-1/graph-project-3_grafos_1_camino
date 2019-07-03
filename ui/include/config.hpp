@@ -96,7 +96,7 @@ const float VERTEX_THICK = 0;
 const float VERTEX_HOVER_THICK = 3;
 const sf::Color VERTEX_THICK_COLOR = sf::Color::Red;
 const sf::Color EDGE_MST = sf::Color::Yellow;
-const int WEIGHT_TEXT_SIZE = 14;
+const int WEIGHT_TEXT_SIZE = 13;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {

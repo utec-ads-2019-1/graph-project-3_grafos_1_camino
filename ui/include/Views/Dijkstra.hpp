@@ -6,7 +6,13 @@ template <typename N, typename E>
 class Dijkstra : public View <N, E> {
   public:
     Dijkstra (Graph <N, E>*& graph, std::string label, sf::Font*& font):
-      View <N, E> (graph, label, font) {}
+      View <N, E> (graph, label, font) {
+      
+      if (this -> graph -> haveNegativeWeight()) {
+        this -> console -> add("Negative weights!!", font, true);
+        this -> len++;
+      } 
+    }
     ~Dijkstra () {
       delete this -> console;
     }
@@ -19,7 +25,7 @@ class Dijkstra : public View <N, E> {
       if (this -> indexVertexSelected != -1) {
         this -> verticesUI[this -> indexVertexSelected] -> setOutlineThickness(VERTEX_THICK);
         while (this -> console -> getSize() > len) this -> console -> pop();
-        if (clicked) {
+        if (clicked and not this -> graph -> haveNegativeWeight()) {
           clicked = false;
           if (not s_source) {
             this -> source = this -> nodes[this -> indexVertexSelected].getTag();

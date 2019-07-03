@@ -11,7 +11,6 @@ class FloydWarshall : public View <N, E> {
       delete this -> console;
     }
     void execute (sf::Font*& font) {
-
     }
     void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
 
@@ -20,4 +19,5 @@ class FloydWarshall : public View <N, E> {
       this -> drawGraph(window);
       this -> console -> draw(window);
     }
+  private:
 };
