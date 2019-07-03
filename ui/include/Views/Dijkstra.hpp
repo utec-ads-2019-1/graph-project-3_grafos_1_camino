@@ -15,6 +15,7 @@ class Dijkstra : public View <N, E> {
     void execute (sf::Font*& font) {
       this -> state = this -> graph -> Dijkstra(this -> source, this -> target);
       this -> current_index = 0;
+      this -> timer = TIMER;
     }
     void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
       if (this -> indexVertexSelected != -1) {
@@ -41,7 +42,7 @@ class Dijkstra : public View <N, E> {
           }
         }
         if (not this -> state.empty()) {
-          N tag = this -> nodes[this -> indexVertexSelected].getTag();  
+          N tag = this -> nodes[this -> indexVertexSelected].getTag();
           double dis = (this -> state)[current_index].second[tag];
           string msg = "dis(" + ss + "," + tag + ")= ";
           char w[100];
@@ -68,12 +69,12 @@ class Dijkstra : public View <N, E> {
         clear();
         clicked = true;
       }
-      if (current_index != -1 and timer < 0 and current_index + 1 < this ->state.size()) {
+      if (current_index != -1 and timer < 0 and current_index < this -> state.size()) {
         nextStep(font);
       }
     }
     void draw (sf::RenderWindow*& window) {
-      timer--;
+      this -> timer--;
       this -> drawGraph(window);
       this -> console -> draw(window);
     }
@@ -94,17 +95,34 @@ class Dijkstra : public View <N, E> {
       }
     }
 
+    void clearEdges () {
+      int i = 0;
+      for (auto edge: this -> edges) {
+        std::pair <N, N> pp = edge.getNodes();
+        Node <N>* from = this -> graph -> findNode(pp.first);
+        Node <N>* to = this -> graph -> findNode(pp.second);
+        sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));
+        sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
+        this -> edgesUI[i] = buildLine(fromPoint, toPoint, EDGE_COLOR, EDGE_THICK);
+        i++;
+      }
+
+    }
+
     void nextStep (sf::Font*& font) {
+      clearEdges();
       Graph <N, E> g = state[current_index].first;
       for (int i = 0; i < int(this -> edgesUI.size()); i++) {
         Edge <N, E> e = this -> edges[i];
-        if (!g.findEdge(e.getNodes().first, e.getNodes().second)) continue;
+        if (!g.findEdge(e.getNodes().first, e.getNodes().second) and
+            !g.findEdge(e.getNodes().second, e.getNodes().first)) continue;
         Node <N>* from = g.findNode(e.getNodes().first);
         Node <N>* to = g.findNode(e.getNodes().second);
         sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));
         sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
         this -> edgesUI[i] = buildLine(fromPoint, toPoint, EDGE_MST, EDGE_THICK);
       }
-      current_index++;
+      this -> timer = TIMER;
+      if (this -> current_index + 1 < this -> state.size()) this -> current_index++;
     }
 };

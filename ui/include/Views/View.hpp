@@ -37,16 +37,20 @@ class View {
                 tags[i], font));
           verticesTextUI.back() -> setFillColor(VERTEX_TEXT_COLOR);
         }
+        std::set <std::pair <N, N>> visited;
         for (auto edge: edgeList) {
           edges.push_back(edge);
           std::pair <N, N> pp = edge.getNodes();
           Node <N>* from = this -> graph -> findNode(pp.first);
           Node <N>* to = this -> graph -> findNode(pp.second);
+          std::pair <N, N> state(from -> getTag(), to -> getTag());
+          if (state.first > state.second) swap(state.first, state.second);
+          if (graph -> isDirected() and visited.count(state)) continue;
           sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));
           sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
           edgesUI.push_back(buildLine(fromPoint, toPoint, EDGE_COLOR, EDGE_THICK));
-          sf::Vector2f mPoint((from -> getX() + to -> getX()) / 2.0, 
-                              (from -> getY() + to -> getY()) / 2.0 );
+          sf::Vector2f mPoint((from -> getX() + 2 * to -> getX()) / 3.0, 
+                              (from -> getY() + 2 * to -> getY()) / 3.0 );
           sf::Vector2f position = getWindowCoordinates(mPoint.x, mPoint.y);
           char w[100];
           sprintf(w, "%.1f", edge.getWeight());

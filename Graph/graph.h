@@ -571,8 +571,21 @@ class Graph {
           addGraph();
         }
       }
+      self g(is_directed);
+      N cur = targetNode;
+      while (path.count(cur)) {
+        N go = path[cur];
+        edge* e = findEdge(go, cur);
+        node* from = findNode(e -> getFrom());
+        g.addNode(from -> getTag(), from -> getX(), from -> getY());
+        node* to = findNode(e -> getTo());
+        g.addNode(to -> getTag(), to -> getX(), to -> getY());
+        g.addEdge(e -> getFrom(), e -> getTo(), e -> getWeight());
+        cur = go;
+      }
+      ret.push_back({g, dis});
       return ret;
-
+      
       /*      
       self dijkstraGraph(is_directed);
       int numNodes = nodeList.size();
