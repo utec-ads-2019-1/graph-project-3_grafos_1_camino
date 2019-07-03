@@ -554,24 +554,31 @@ class Graph {
       return ret;
     }
 
-    std::map <N, std::map <N, double>> floydWarshall () {
+    std::pair <std::map <N, std::map <N, double>>, std::map <N, std::map <N, N>>> FloydWarshall () {
       std::map <N, std::map <N, double>> dis;
-      for (N u: nodeList) {
-        for (N v: nodeList) {
-          dis[u][v] = INF;
+      std::map <N, std::map <N, N>> path;
+      for (node u: nodeList) {
+        for (node v: nodeList) {
+          dis[u.getTag()][v.getTag()] = INF;
+        }
+        dis[u.getTag()][u.getTag()] = 0;
+      }
+      for (edge e: edgeList) {
+        dis[e.getFrom()][e.getTo()] = e.getWeight();
+        path[e.getFrom()][e.getTo()] = e.getFrom();
+      }
+      for (node k: nodeList) {
+        for (node i: nodeList) {
+          for (node j: nodeList) {
+            N kk = k.getTag(), ii = i.getTag(), jj = j.getTag();
+            if (dis[ii][jj] > dis[ii][kk] + dis[kk][jj]) {
+              dis[ii][jj] = dis[ii][kk] + dis[kk][jj];
+              path[ii][jj] = kk;
+            }
+          }
         }
       }
-      // Do the algorithm
-        for (int k = 0; k < getNumberOfNodes(); ++k) {
-            for (int i = 0; i < getNumberOfNodes(); ++i) {
-                for (int j = 0; j < getNumberOfNodes(); ++j) {
-                    dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j]);
-                }
-            }
-        }
-
-
-      return dis;
+      return {dis, path};
     }
 
     //Elvis
