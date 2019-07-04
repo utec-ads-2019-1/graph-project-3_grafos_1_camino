@@ -46,11 +46,18 @@ class View {
           std::pair <N, N> state(from -> getTag(), to -> getTag());
           if (state.first > state.second) swap(state.first, state.second);
           if (graph -> isDirected() and visited.count(state)) continue;
+          visited.insert(state);
           sf::Vector2f fromPoint(getWindowCoordinates(from -> getX(), from -> getY()));
           sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
           edgesUI.push_back(buildLine(fromPoint, toPoint, EDGE_COLOR, EDGE_THICK));
-          sf::Vector2f mPoint((from -> getX() + 2 * to -> getX()) / 3.0, 
-                              (from -> getY() + 2 * to -> getY()) / 3.0 );
+          sf::Vector2f mPoint;
+          if (graph -> isDirected()) {
+            mPoint = sf::Vector2f((from -> getX() + 2 * to -> getX()) / 2.0, 
+                                 (from -> getY() + 2 * to -> getY()) / 2.0 );
+          } else {
+            mPoint = sf::Vector2f((from -> getX() + to -> getX()) / 2.0, 
+                                 (from -> getY() + to -> getY()) / 2.0 );
+          }
           sf::Vector2f position = getWindowCoordinates(mPoint.x, mPoint.y);
           char w[100];
           sprintf(w, "%.1f", edge.getWeight());

@@ -94,6 +94,7 @@ class A_Star : public View <N, E> {
     }
 
     void clearEdges () {
+      
       int i = 0;
       for (auto edge: this -> edges) {
         std::pair <N, N> pp = edge.getNodes();

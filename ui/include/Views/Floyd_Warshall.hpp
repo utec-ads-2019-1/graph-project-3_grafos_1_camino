@@ -15,6 +15,7 @@ class FloydWarshall: public View <N, E> {
     void execute (sf::Font*& font) {
       float dis = this -> state.first[this -> source][this -> target];
       if (std::fabs(dis - this -> graph -> getInfinity()) < 1e-6) return;
+      if (dis > this -> graph -> getInfinity() / 1000) return;
       N cur = target;
       Graph <N, E> path_graph(this -> graph -> isDirected());
       auto wa = this -> state.second;
@@ -38,7 +39,6 @@ class FloydWarshall: public View <N, E> {
         sf::Vector2f toPoint(getWindowCoordinates(to -> getX(), to -> getY()));
         this -> edgesUI[i] = buildLine(fromPoint, toPoint, EDGE_MST, EDGE_THICK);
       }
-
     }
     void update (sf::RenderWindow*& window, const sf::Event& event, sf::Font*& font) {
       if (this -> indexVertexSelected != -1) {

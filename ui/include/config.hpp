@@ -80,7 +80,7 @@ const float CONSOLE_PADDING = CONSOLE_WIDTH / 10;
 const sf::Color CONSOLE_COLOR = sf::Color::Green;
 
 // GRAPH UI
-const int TIMER = 60 * 1 + 30 * 1;
+const int TIMER = 60 * 2 + 30 * 1;
 const float VERTEX_RADIUS = 15.f;
 const sf::Color VERTEX_COLOR = sf::Color::White;
 const sf::Color VERTEX_TEXT_COLOR = sf::Color::Red;
@@ -96,7 +96,7 @@ const float VERTEX_THICK = 0;
 const float VERTEX_HOVER_THICK = 3;
 const sf::Color VERTEX_THICK_COLOR = sf::Color::Red;
 const sf::Color EDGE_MST = sf::Color::Yellow;
-const int WEIGHT_TEXT_SIZE = 13;
+const int WEIGHT_TEXT_SIZE = 14;
 
 // UTIL
 static sf::RectangleShape* buildRectangle (sf::Vector2f dimentions, sf::Vector2f position, sf::Color background, int thick = 1, bool border = false) {

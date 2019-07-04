@@ -291,8 +291,8 @@ class Graph {
 
       std::unordered_map<N, N> parent;
       std::unordered_map<N,double> g_node;
-      set<pair<N, double>> f_node;
-      f_node.insert({start, 0});
+      set<pair<double, N>> f_node;
+      f_node.insert({0, start});
 
 
       parent[start] = start;
@@ -301,7 +301,7 @@ class Graph {
       addGraph();
 
       while (!f_node.empty()) {
-        N current = f_node.begin()->first;
+        N current = f_node.begin()->second;
         f_node.erase(f_node.begin());
         if (current == goal) {
           break;
@@ -310,7 +310,6 @@ class Graph {
         for (N next : neighbors_current) {
 
           edge* e = findEdge(current, next);
-          visited.insert(*e);
           E costo_current_next = findEdge(current,next)->getWeight();
           double g = g_node[current] + costo_current_next;
 
@@ -319,7 +318,7 @@ class Graph {
             g_node[next] = g;
             double heuristic = findNode(next)->heuristic(*findNode(goal));
             double f = g + heuristic;
-            f_node.insert({next, f});
+            f_node.insert({f, next});
             dis[next] = g;
             parent[next] = current;
             visited.insert(*e);
